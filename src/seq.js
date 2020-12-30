@@ -34,6 +34,10 @@ export class Sequence {
         return new Sequence(() => generate_map(mapperFunction, this._generator));
     }
 
+    flatMap(nestMapperFunction) {
+        return new Sequence(() => generate_flatMap(nestMapperFunction, this._generator));
+    }
+
     limit(count) {
         return new Sequence(() => generate_limit(count, this._generator));
     }
@@ -129,6 +133,23 @@ export class Sequence {
         return this.reduce(0, (accumulator, _) => accumulator + 1);
     }
 
+    average() {
+        const generator = this._generator();
+        let count = 0;
+        let sum = 0;
+
+        for(const e of generator) {
+            ++count;
+            sum += e;
+        }
+
+        return sum / count;
+    }
+
+    join(separator = '') {
+        return this.toArray().join(separator);
+    }
+
     min(keySelectorFunction = k => k) {
         const generator = this._generator();
         const firstElement = generator.next();
@@ -166,25 +187,39 @@ export class Sequence {
     }
 
     toArray() {
-        return this._collect([], (result, nextElement) => result.push(nextElement));
+        return this._collect([], (result, element) => result.push(element));
     }
 
     toMap(keySelectorFunction, valueSelectorFunction) {
-        return this._collect({}, (result, nextElement) => result[keySelectorFunction(nextElement)] = valueSelectorFunction(nextElement));
+        return this._collect({}, (result, element) => result[keySelectorFunction(element)] = valueSelectorFunction(element));
     }
 
     partitionBy(predicateFunction) {
-        return this._collect([[], []], (result, nextElement) => result[predicateFunction(nextElement) === true ? 0 : 1].push(nextElement));
+        return this._collect([[], []], (result, element) => result[predicateFunction(element) === true ? 0 : 1].push(element));
+    }
+
+    groupingBy(keySelectorFunction, grouperFunction = Grouper.toArray()) {
+        return this._collect({}, (result, element) => {
+            const mappedKey = keySelectorFunction(element);
+
+            if(result[mappedKey] === undefined) {
+                result[mappedKey] = grouperFunction.accumulatorSupplier();
+            }
+
+            grouperFunction.accumulatorFunction(result, mappedKey, element);
+        });
     }
 
     first() {
-        const generator = this._generator();
+        const element = this._generator().next();
 
-        for(const e of generator) {
-            return Optional.of(e);
-        }
+        return element.done ? Optional.empty() : Optional.of(element.value);
+    }
 
-        return Optional.empty();
+    last() {
+        const element = this._generator().next();
+
+        return element.done ? Optional.empty() : this.reduce(element.value, (_, nextElement) => nextElement);
     }
 
     allMatches(predicateFunction) {
@@ -209,6 +244,30 @@ export class Sequence {
         }
 
         return false;
+    }
+}
+
+export class Grouper {
+
+    static toArray() {
+        return {
+            accumulatorSupplier: () => [],
+            accumulatorFunction: (accumulator, key, element) => accumulator[key].push(element)
+        }
+    }
+
+    static counting() {
+        return {
+            accumulatorSupplier: () => 0,
+            accumulatorFunction: (accumulator, key, _) => ++accumulator[key]
+        }
+    }
+
+    static summing(keySelector) {
+        return {
+            accumulatorSupplier: () => 0,
+            accumulatorFunction: (accumulator, key, element) => accumulator[key] += keySelector(element)
+        }
     }
 }
 
@@ -294,6 +353,18 @@ function* generate_map(mapper, oldGeneratorRef) {
         }
 
         yield mapper(nextElement.value);
+    }
+}
+
+function* generate_flatMap(mapper, oldGeneratorRef) {
+    const generator = oldGeneratorRef();
+
+    for(const element of generator) {
+        const nested = mapper(element);
+
+        for(const n of nested) {
+            yield n;
+        }
     }
 }
 
