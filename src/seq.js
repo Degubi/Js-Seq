@@ -50,6 +50,10 @@ export class Sequence {
         return new Sequence(() => generate_takeWhile(predicateFunction, this._generator));
     }
 
+    dropWhile(predicateFunction) {
+        return new Sequence(() => generate_dropWhile(predicateFunction, this._generator));
+    }
+
     distinct(keySelectorFunction = k => k) {
         const generator = this._generator();
         const uniqueElements = [];
@@ -162,7 +166,7 @@ export class Sequence {
         const firstElement = generator.next();
 
         if(firstElement.done) {
-            return Optional.empty();
+            return null;
         }
 
         let returnValue = firstElement.value;
@@ -172,7 +176,7 @@ export class Sequence {
             }
         }
 
-        return Optional.of(returnValue);
+        return returnValue;
     }
 
     max(keySelectorFunction = k => k) {
@@ -180,7 +184,7 @@ export class Sequence {
         const firstElement = generator.next();
 
         if(firstElement.done) {
-            return Optional.empty();
+            return null;
         }
 
         let returnValue = firstElement.value;
@@ -190,7 +194,7 @@ export class Sequence {
             }
         }
 
-        return Optional.of(returnValue);
+        return returnValue;
     }
 
     toArray() {
@@ -220,13 +224,13 @@ export class Sequence {
     first() {
         const element = this._generator().next();
 
-        return element.done ? Optional.empty() : Optional.of(element.value);
+        return element.done ? null : element.value;
     }
 
     last() {
         const element = this._generator().next();
 
-        return element.done ? Optional.empty() : this.reduce(element.value, (_, nextElement) => nextElement);
+        return element.done ? null : this.reduce(element.value, (_, nextElement) => nextElement);
     }
 
     allMatches(predicateFunction) {
@@ -283,31 +287,6 @@ export class Grouper {
             accumulatorFunction: (accumulator, key, element) => { accumulator[key].sum += keySelector(element); ++accumulator[key].count; },
             finisherFunction: (result, key, value) => result[key] = value.sum / value.count
         }
-    }
-}
-
-export class Optional {
-    static empty_optional = new Optional();
-
-    constructor(value, hasValue) {
-        this.value = value;
-        this.hasValue = hasValue;
-    }
-
-    static empty() {
-        return Optional.empty_optional;
-    }
-
-    static of(element) {
-        if(element === null || element === undefined) {
-            throw `Can't put null or undefined into an optional!`;
-        }
-
-        return new Optional(element, true);
-    }
-
-    static ofNullable(element) {
-        return new Optional(element, element !== null && element !== undefined);
     }
 }
 
@@ -427,5 +406,26 @@ function* generate_takeWhile(predicate, oldGeneratorRef) {
         }
 
         yield nextElement.value;
+    }
+}
+
+function* generate_dropWhile(predicate, oldGeneratorRef) {
+    const generator = oldGeneratorRef();
+    
+    while(true) {
+        const nextElement = generator.next();
+
+        if(nextElement.done) {
+            return;
+        }
+
+        if(predicate(nextElement.value) === false) {
+            yield nextElement.value;
+            break;
+        }
+    }
+
+    for(const remaining of generator) {
+        yield remaining;
     }
 }
