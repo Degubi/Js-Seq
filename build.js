@@ -5,5 +5,5 @@ const buildDir = './build';
 rmdirSync(buildDir, { recursive: true });
 mkdirSync(buildDir);
 
-minify(readFileSync('./seq.js').toString(), { module: true, toplevel: true })
+minify(readFileSync('./src/seq.js').toString(), { module: true, toplevel: true })
 .then(k => writeFileSync(`${buildDir}/seq.js`, k.code));

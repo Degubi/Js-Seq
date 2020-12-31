@@ -56,8 +56,10 @@ export class Sequence {
 
         generatorLoop:
         for(const e of generator) {
+            const elementKeySelected = keySelectorFunction(e);
+
             for(const uniq of uniqueElements) {
-                if(keySelectorFunction(e) === keySelectorFunction(uniq)) {
+                if(elementKeySelected === keySelectorFunction(uniq)) {
                     continue generatorLoop;
                 }
             }
@@ -68,32 +70,31 @@ export class Sequence {
         return new Sequence(() => generate_of(uniqueElements));
     }
 
-    sortAscending(keySelectorFunction = k => k) {
+    sort(comparerFunction) {
         const allElements = this.toArray();
 
-        allElements.sort((f, s) => {
+        allElements.sort(comparerFunction);
+
+        return new Sequence(() => generate_of(allElements));
+    }
+
+    sortAscending(keySelectorFunction = k => k) {
+        return this.sort((f, s) => {
             const firstKey = keySelectorFunction(f);
             const secondKey = keySelectorFunction(s);
 
             return firstKey < secondKey ? -1 : firstKey > secondKey ? 1 : 0;
         });
-
-        return new Sequence(() => generate_of(allElements));
     }
 
     sortDescending(keySelectorFunction = k => k) {
-        const allElements = this.toArray();
-
-        allElements.sort((f, s) => {
+        return this.sort((f, s) => {
             const firstKey = keySelectorFunction(f);
             const secondKey = keySelectorFunction(s);
 
             return firstKey < secondKey ? 1 : firstKey > secondKey ? -1 : 0;
         });
-
-        return new Sequence(() => generate_of(allElements));
     }
-
 
 
     forEach(consumerFunction) {
@@ -115,11 +116,17 @@ export class Sequence {
         return returnVal;
     }
 
-    _collect(collection, accumulatorFunction) {
+    _collect(collection, accumulatorFunction, finisherFunction) {
         const generator = this._generator();
 
         for(const e of generator) {
             accumulatorFunction(collection, e);
+        }
+
+        if(finisherFunction) {
+            for(const [key, value] of Object.entries(collection)) {
+                finisherFunction(collection, key, value);
+            }
         }
 
         return collection;
@@ -207,7 +214,7 @@ export class Sequence {
             }
 
             grouperFunction.accumulatorFunction(result, mappedKey, element);
-        });
+        }, grouperFunction.finisherFunction);
     }
 
     first() {
@@ -267,6 +274,14 @@ export class Grouper {
         return {
             accumulatorSupplier: () => 0,
             accumulatorFunction: (accumulator, key, element) => accumulator[key] += keySelector(element)
+        }
+    }
+
+    static averaging(keySelector) {
+        return {
+            accumulatorSupplier: () => ({ sum: 0, count: 0 }),
+            accumulatorFunction: (accumulator, key, element) => { accumulator[key].sum += keySelector(element); ++accumulator[key].count; },
+            finisherFunction: (result, key, value) => result[key] = value.sum / value.count
         }
     }
 }

@@ -14,6 +14,7 @@ declare export class Sequence<T> {
     skip(count: number): Sequence<T>;
     takeWhile(predicateFunction: (element: T) => boolean): Sequence<T>;
     distinct(keySelectorFunction: (element: T) => any = k => k): Sequence<T>;
+    sort(comparerFunction: (k: T, v: T) => number): Sequence<T>;
     sortAscending(keySelectorFunction: (element: T) => any = k => k): Sequence<T>;
     sortDescending(keySelectorFunction: (element: T) => any = k => k): Sequence<T>;
 
@@ -40,6 +41,7 @@ declare export class Grouper<V> {
     static identity(): Grouper<V[]>;
     static counting(): Grouper<number>;
     static summing<K>(keySelectorFunction: (k: K) => number): Grouper<number>;
+    static averaging<K>(keySelectorFunction: (k: K) => number): Grouper<number>;
 }
 
 declare export class Optional<T> {
