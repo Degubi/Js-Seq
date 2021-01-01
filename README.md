@@ -1,4 +1,6 @@
 # Javascript functional sequence processing library
+![Run tests](https://github.com/Degubi/JsSeq/workflows/Run%20tests/badge.svg)
+
 - The api is very similar to java8 streams
 - Lazy by default
 - Made because of boredom
