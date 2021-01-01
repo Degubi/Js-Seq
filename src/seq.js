@@ -20,6 +20,10 @@ export class Sequence {
         return new Sequence(() => generate_generate(generatorFunction));
     }
 
+    static empty() {
+        return new Sequence(() => generate_empty());
+    }
+
     static of(...elements) {
         return new Sequence(() => generate_of(elements));
     }
@@ -38,8 +42,8 @@ export class Sequence {
         return new Sequence(() => generate_flatMap(nestMapperFunction, this._generator));
     }
 
-    limit(count) {
-        return new Sequence(() => generate_limit(count, this._generator));
+    take(count) {
+        return new Sequence(() => generate_take(count, this._generator));
     }
 
     skip(count) {
@@ -50,8 +54,8 @@ export class Sequence {
         return new Sequence(() => generate_takeWhile(predicateFunction, this._generator));
     }
 
-    dropWhile(predicateFunction) {
-        return new Sequence(() => generate_dropWhile(predicateFunction, this._generator));
+    skipWhile(predicateFunction) {
+        return new Sequence(() => generate_skipWhile(predicateFunction, this._generator));
     }
 
     distinct(keySelectorFunction = k => k) {
@@ -110,30 +114,7 @@ export class Sequence {
     }
 
     reduce(seed, accumulatorFunction) {
-        const generator = this._generator();
-        let returnVal = seed;
-
-        for(const e of generator) {
-            returnVal = accumulatorFunction(returnVal, e);
-        }
-
-        return returnVal;
-    }
-
-    _collect(collection, accumulatorFunction, finisherFunction) {
-        const generator = this._generator();
-
-        for(const e of generator) {
-            accumulatorFunction(collection, e);
-        }
-
-        if(finisherFunction) {
-            for(const [key, value] of Object.entries(collection)) {
-                finisherFunction(collection, key, value);
-            }
-        }
-
-        return collection;
+        return _reduce(seed, this._generator(), accumulatorFunction);
     }
 
     sum() {
@@ -145,23 +126,16 @@ export class Sequence {
     }
 
     average() {
-        const generator = this._generator();
-        let count = 0;
-        let sum = 0;
+        const { sum, count } = _collect({ count: 0, sum: 0 }, this._generator(), (accumulator, nextElement) => { ++accumulator.count; accumulator.sum += nextElement; });
 
-        for(const e of generator) {
-            ++count;
-            sum += e;
-        }
-
-        return sum / count;
+        return count === 0 ? null : sum / count;
     }
 
     join(separator = '') {
         return this.toArray().join(separator);
     }
 
-    min(keySelectorFunction = k => k) {
+    min(keySelector = k => k) {
         const generator = this._generator();
         const firstElement = generator.next();
 
@@ -169,17 +143,10 @@ export class Sequence {
             return null;
         }
 
-        let returnValue = firstElement.value;
-        for(const e of generator) {
-            if(keySelectorFunction(e) < keySelectorFunction(returnValue)) {
-                returnValue = e;
-            }
-        }
-
-        return returnValue;
+        return _reduce(firstElement.value, generator, (accumulator, nextElement) => keySelector(accumulator) < keySelector(nextElement) ? accumulator : nextElement);
     }
 
-    max(keySelectorFunction = k => k) {
+    max(keySelector = k => k) {
         const generator = this._generator();
         const firstElement = generator.next();
 
@@ -187,30 +154,49 @@ export class Sequence {
             return null;
         }
 
-        let returnValue = firstElement.value;
-        for(const e of generator) {
-            if(keySelectorFunction(e) > keySelectorFunction(returnValue)) {
-                returnValue = e;
-            }
-        }
-
-        return returnValue;
+        return _reduce(firstElement.value, generator, (accumulator, nextElement) => keySelector(accumulator) > keySelector(nextElement) ? accumulator : nextElement);
     }
 
     toArray() {
-        return this._collect([], (result, element) => result.push(element));
+        return _collect([], this._generator(), (result, element) => result.push(element));
     }
 
-    toMap(keySelectorFunction, valueSelectorFunction) {
-        return this._collect({}, (result, element) => result[keySelectorFunction(element)] = valueSelectorFunction(element));
+    toMap(keySelectorFunction, valueSelectorFunction,
+          duplicateResolverFunction = (key, oldE, newE) => { throw `Duplicate value found for key: '${key}', previous value: '${oldE}', current value: '${newE}'`;}) {
+
+        return _collect({}, this._generator(), (result, element) => {
+            const key = keySelectorFunction(element);
+            const value = valueSelectorFunction(element);
+
+            if(result[key] === undefined) {
+                result[key] = value;
+            }else{
+                result[key] = duplicateResolverFunction(key, result[key], value);
+            }
+        });
     }
 
     partitionBy(predicateFunction) {
-        return this._collect([[], []], (result, element) => result[predicateFunction(element) === true ? 0 : 1].push(element));
+        return _collect([[], []], this._generator(), (result, element) => result[predicateFunction(element) === true ? 0 : 1].push(element));
+    }
+
+    chunking(chunkSizes) {
+        const generator = this._generator();
+        const firstElement = generator.next();
+
+        return firstElement.done ? [] : _collect([[ firstElement.value ]], generator, (result, element) => {
+            const lastArray = result[result.length - 1];
+
+            if(lastArray.length === chunkSizes) {
+                result.push([ element ]);
+            }else{
+                lastArray.push(element);
+            }
+        });
     }
 
     groupingBy(keySelectorFunction, grouperFunction = Grouper.toArray()) {
-        return this._collect({}, (result, element) => {
+        const result = _collect({}, this._generator(), (result, element) => {
             const mappedKey = keySelectorFunction(element);
 
             if(result[mappedKey] === undefined) {
@@ -218,19 +204,28 @@ export class Sequence {
             }
 
             grouperFunction.accumulatorFunction(result, mappedKey, element);
-        }, grouperFunction.finisherFunction);
+        });
+
+        const finisherFunction = grouperFunction.finisherFunction;
+        if(finisherFunction) {
+            for(const [key, value] of Object.entries(result)) {
+                finisherFunction(result, key, value);
+            }
+        }
+
+        return result;
     }
 
     first() {
-        const element = this._generator().next();
+        const firstElement = this._generator().next();
 
-        return element.done ? null : element.value;
+        return firstElement.done ? null : firstElement.value;
     }
 
     last() {
-        const element = this._generator().next();
+        const firstElement = this._generator().next();
 
-        return element.done ? null : this.reduce(element.value, (_, nextElement) => nextElement);
+        return firstElement.done ? null : this.reduce(firstElement.value, (_, nextElement) => nextElement);
     }
 
     allMatches(predicateFunction) {
@@ -295,6 +290,24 @@ Array.prototype.sequence = function() {
 }
 
 
+function _reduce(seed, generator, accumulatorFunction) {
+    let returnVal = seed;
+
+    for(const e of generator) {
+        returnVal = accumulatorFunction(returnVal, e);
+    }
+
+    return returnVal;
+}
+
+function _collect(result, generator, accumulatorFunction) {
+    for(const e of generator) {
+        accumulatorFunction(result, e);
+    }
+
+    return result;
+}
+
 
 function* generate_range(begin, end, increment) {
     for(let i = begin; i < end; i += increment) {
@@ -313,6 +326,8 @@ function* generate_of(elements) {
         yield e;
     }
 }
+
+function* generate_empty() {}
 
 function* generate_generate(generator) {
     while(true) {
@@ -362,7 +377,7 @@ function* generate_flatMap(mapper, oldGeneratorRef) {
     }
 }
 
-function* generate_limit(count, oldGeneratorRef) {
+function* generate_take(count, oldGeneratorRef) {
     const generator = oldGeneratorRef();
     let yieldedCount = 0;
 
@@ -409,7 +424,7 @@ function* generate_takeWhile(predicate, oldGeneratorRef) {
     }
 }
 
-function* generate_dropWhile(predicate, oldGeneratorRef) {
+function* generate_skipWhile(predicate, oldGeneratorRef) {
     const generator = oldGeneratorRef();
     
     while(true) {

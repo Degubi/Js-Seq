@@ -21,6 +21,10 @@ test('Create sequence using of', () =>
     expect(sources.of().toArray())
     .toStrictEqual([ 0, 1, 2, 3 ]));
 
+test('Create sequence using empty', () =>
+    expect(sources.empty().toArray())
+    .toStrictEqual([ ]));
+
 test('Test filter', () =>
     expect(sources.filter().toArray())
     .toStrictEqual([ 0, 2, 4 ]));
@@ -33,8 +37,8 @@ test('Test flatMap', () =>
     expect(sources.flatMap().toArray())
     .toStrictEqual([ 1, 2, 3, 4, 5, 6 ]));
 
-test('Test limit', () =>
-    expect(sources.limit().toArray())
+test('Test take', () =>
+    expect(sources.take().toArray())
     .toStrictEqual([ 0, 2, 4, 6, 8, 10 ]));
 
 test('Test skip', () =>
@@ -45,8 +49,8 @@ test('Test takeWhile', () =>
     expect(sources.takeWhile().toArray())
     .toStrictEqual([ 1, 2, 4, 8, 16 ]));
 
-test('Test dropWhile', () =>
-    expect(sources.dropWhile().toArray())
+test('Test skipWhile', () =>
+    expect(sources.skipWhile().toArray())
     .toStrictEqual([ 6, 7, 8, 9 ]));
 
 test('Test distinct with numbers', () =>

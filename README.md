@@ -24,19 +24,44 @@ Sequence.of(1, 3, 3, 7, 4, 2, 0)               // Sequence of specific elements
 
 ## Transforming sequences (intermediate operations):
 - These operations do nothing by themselves, they only start doing work when the terminal operation gets called
+- Function list:
+
+<br>
+<table>
+    <tr>
+        <td>filter</td>
+        <td>map</td>
+        <td>flatMap</td>
+        <td>distinct</td>
+    </tr>
+    <tr>
+        <td>take</td>
+        <td>skip</td>
+        <td>takeWhile</td>
+        <td>skipWhile</td>
+    </tr>
+    <tr>
+        <td>sort</td>
+        <td>sortAscending</td>
+        <td>sortDescending</td>
+        <td></td>
+    </tr>
+</table>
+<br>
+
 - Examples:
 
 ```javascript
-Sequence.range(0, 100);               // Need to create a new sequence with every new pipeline
-        .filter(k => k % 2 === 0)     // Keep only even values in the sequence
-        .map(k => k * 2)              // Multiply them by 2
-        .skip(2)                      // Skip the first 2 elements
-        .limit(10)                    // Take the first 10 elements only
-        .sortAscending()              // Sort them in ascending order
+Sequence.range(0, 100);             // Need to create a new sequence with every new pipeline
+        .filter(k => k % 2 === 0)   // Keep only even values in the sequence
+        .map(k => k * 2)            // Multiply them by 2
+        .skip(2)                    // Skip the first 2 elements
+        .take(10)                   // Take the first 10 elements only
+        .sortAscending()            // Sort them in ascending order
 
 Sequence.of({ prop1: 5, prop2: 'hey' }, { prop1: 5, prop2: 'ho'}, { prop1: 20, prop2: 'hi' })
-        .distinct(k => k.prop1)             // Many functions have key selecting overloads, default is always identity
-        .sortDescending(k => k.prop1)       // Same happens here
+        .distinct(k => k.prop1)         // Many functions have key selecting overloads, default is always identity
+        .sortDescending(k => k.prop1)   // Same happens here
 
 Sequence.of({ data: [ 1, 2, 3, 4 ] }, { data: [ 5, 6, 7, 8 ] })
         .flatMap(k => k.data)
@@ -44,32 +69,82 @@ Sequence.of({ data: [ 1, 2, 3, 4 ] }, { data: [ 5, 6, 7, 8 ] })
 ```
 
 ## Finishing sequences (terminal operations):
+- Function list:
+
+<br>
+<table>
+    <tr>
+        <td>forEach</td>
+        <td>reduce</td>
+        <td>toArray</td>
+        <td>toMap</td>
+        <td>partitionBy</td>
+    </tr>
+    <tr>
+        <td>sum</td>
+        <td>count</td>
+        <td>average</td>
+        <td>min</td>
+        <td>max</td>
+    </tr>
+    <tr>
+        <td>chunking</td>
+        <td>groupingBy</td>
+        <td>first</td>
+        <td>last</td>
+        <td>join</td>
+    </tr>
+    <tr>
+        <td>allMatches</td>
+        <td>anyMatches</td>
+    </tr>
+</table>
+<br>
+
 - Examples
 
 ```javascript
-const seq = Sequence.range(0, 100);  // Let's assume we recreate this sequence every time
+const seq = Sequence.range(0, 100); // Let's assume we recreate this sequence every time
 
-seq.forEach(console.log);            // Print every value to the console
-seq.reduce(0, (k, l) => k + l);      // Sum all values
-seq.sum();                           // Shorthand for summing
-seq.count();                         // Count number of elements in sequence
-seq.min();                           // Find the smallest value in the sequence, has key selector overload
-seq.max();                           // Find the largest value in the sequence, has key selector overload
-seq.average();                       // Average of the values in the sequence
-seq.toArray();                       // Collect all elements into an array
-seq.first();                         // Find the first element in the sequence, this returns the element or null
-seq.last();                          // Find the last element in the sequence, this returns the element or null
-seq.join(',');                       // Join elements with a comma
+seq.forEach(console.log);           // Print every value to the console
+seq.reduce(0, (k, l) => k + l);     // Sum all values
+seq.sum();                          // Shorthand for summing
+seq.count();                        // Count number of elements in sequence
+seq.min();                          // Find the smallest value in the sequence, has key selector overload
+seq.max();                          // Find the largest value in the sequence, has key selector overload
+seq.average();                      // Average of the values in the sequence
+seq.toArray();                      // Collect all elements into an array
+seq.first();                        // Find the first element in the sequence, this returns the element or null
+seq.last();                         // Find the last element in the sequence, this returns the element or null
+seq.join(',');                      // Join elements with a comma
 
 const seq = Sequence.of({ prop1: 5, prop2: 'hey' }, { prop1: 20, prop2: 'hi' }, { prop1: 20, prop2: 'hey' });
 
-seq.toMap(k => k.prop1, k => k.prop2);                        // Creates an object where the keys are from 'prop1' and the corresponding values are from 'prop2'
-seq.allMatches(k => k.prop1 > 0);                             // Returns true if the given predicate is true for all elements of the sequence
-seq.anyMatches(k => k.prop2 === 'nope');                      // Returns true if the given predicate is true for any of the elements of the sequence
-seq.groupingBy(k => k.prop1);                                 // Groups elements by 'prop1' where the values are the objects that had the same key
-seq.groupingBy(k => k.prop1, Grouper.toArray());              // This does the same as the last example
-seq.groupingBy(k => k.prop1, Grouper.counting());             // Groups elements prop1' where the value is the frequency of the key
-seq.groupingBy(k => k.prop2, Grouper.summing(k => k.prop1));  // Groups elements by 'prop2' where the value is the sum of 'prop1'
+// Creates an object where the keys are from 'prop1' and the corresponding values are from 'prop2'
+// Note: This call throws an error because of the duplicate 'prop1: 20' key
+seq.toMap(k => k.prop1, k => k.prop2);
 
-const [matching, notMatching] = seq.partitionBy(k => k.prop1 % 2 === 0);  // First array contains the elements where the predicate was true
+// This is the same as the last example, but this version handles the duplicate key problem by keeping the first value
+seq.toMap(k => k.prop1, k => k.prop2, (key, previousValue, currentValue) => previousValue);
+
+// Returns true if the given predicate is true for all elements of the sequence
+seq.allMatches(k => k.prop1 > 0);
+
+// Returns true if the given predicate is true for any of the elements of the sequence
+seq.anyMatches(k => k.prop2 === 'nope');
+
+// Groups elements by 'prop1' where the values are the objects that had the same key
+seq.groupingBy(k => k.prop1);
+
+// This does the same as the last example
+seq.groupingBy(k => k.prop1, Grouper.toArray());
+
+// Groups elements prop1' where the value is the frequency of the key
+seq.groupingBy(k => k.prop1, Grouper.counting());
+
+// Groups elements by 'prop2' where the value is the sum of 'prop1'
+seq.groupingBy(k => k.prop2, Grouper.summing(k => k.prop1));
+
+// First array contains the elements where the predicate was true
+const [matching, notMatching] = seq.partitionBy(k => k.prop1 % 2 === 0);
 ```

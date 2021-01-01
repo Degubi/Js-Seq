@@ -21,6 +21,10 @@ test('Create sequence using of', () =>
     expect(sources.of().sum())
     .toEqual(6));
 
+test('Create sequence using empty', () =>
+    expect(sources.empty().sum())
+    .toEqual(0));
+
 test('Test filter', () =>
     expect(sources.filter().sum())
     .toEqual(6));
@@ -33,8 +37,8 @@ test('Test flatMap', () =>
     expect(sources.flatMap().sum())
     .toEqual(21));
 
-test('Test limit', () =>
-    expect(sources.limit().sum())
+test('Test take', () =>
+    expect(sources.take().sum())
     .toEqual(30));
 
 test('Test skip', () =>
@@ -45,8 +49,8 @@ test('Test takeWhile', () =>
     expect(sources.takeWhile().sum())
     .toEqual(31));
 
-test('Test dropWhile', () =>
-    expect(sources.dropWhile().sum())
+test('Test skipWhile', () =>
+    expect(sources.skipWhile().sum())
     .toEqual(30));
 
 test('Test distinct with numbers', () =>

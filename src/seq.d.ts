@@ -44,6 +44,12 @@ declare export class Sequence<T> {
     static generate<T>(generatorFunction: () => T): Sequence<T>;
 
     /**
+     * Function for creating an empty sequence.
+     * @returns Sequence with 0 elements
+     */
+    static empty<T>(): Sequence<T>;
+
+    /**
      * Function for creating a sequence of elements using the passed in elements as the source.  
      * Note: this is not the same as calling Array.sequence, do not pass in an array into this function.
      * @param elements Input elements
@@ -76,9 +82,9 @@ declare export class Sequence<T> {
     /**
      * Method for creating a new sequence with a specific amount of elements.
      * @param count Number of elements to keep in the sequence
-     * @returns New sequence containing 'n' number of elements
+     * @returns New sequence containing the first 'n' number of elements
      */
-    limit(count: number): Sequence<T>;
+    take(count: number): Sequence<T>;
 
     /**
      * Method for creating a new sequence while skipping 'n' number of elements.
@@ -95,11 +101,11 @@ declare export class Sequence<T> {
     takeWhile(predicateFunction: (element: T) => boolean): Sequence<T>;
 
     /**
-     * Method for creating a new sequence that drops elements until the given predicate returns true
+     * Method for creating a new sequence that skips elements until the given predicate returns true
      * @param predicateFunction The function to test against
-     * @returns New sequence that drops elements until the given predicate returns true
+     * @returns New sequence that skips elements until the given predicate returns true
      */
-    dropWhile(predicateFunction: (element: T) => boolean): Sequence<T>;
+    skipWhile(predicateFunction: (element: T) => boolean): Sequence<T>;
 
     /**
      * Method for creating a new sequence containing only unique values.  
@@ -112,6 +118,7 @@ declare export class Sequence<T> {
     sortAscending(keySelectorFunction: (element: T) => any = k => k): Sequence<T>;
     sortDescending(keySelectorFunction: (element: T) => any = k => k): Sequence<T>;
 
+    
     /**
      * Method for terminating the sequence and applying a function to each of the elements.
      * @param consumerFunction Function to apply to each of the elements
@@ -134,9 +141,10 @@ declare export class Sequence<T> {
 
     /**
      * Method for terminating the sequence while calculating the average of the elements.
-     * @returns Average of the elements in the sequence
+     * Note: This function returns null if the sequence is empty
+     * @returns Average of the elements in the sequence or null if the sequence was empty
      */
-    average(): number;
+    average(): number?;
 
     /**
      * Method for terminating the sequence while joining the elements together using the given separator.
@@ -169,12 +177,15 @@ declare export class Sequence<T> {
 
     /**
      * Method for terminating the sequence and collecting the elements into an object using the key & value selector functions  
-     * TODO Need to add function for handling duplicate key insertion logic
      * @param keySelectorFunction Function used for extracting the key from the object
      * @param valueSelectorFunction Function used for extracting the value from the object
+     * @param duplicateResolverFunction Takes 3 arguments: the key, the old value and the value we're trying to insert at the moment.
+     * Return value is the value that gets inserted as the value of the duplicate key. Default is to throw an error
      * @returns An object where the keys are populated using the keySelector and the corresponding values are the values returned by the valueSelector
      */
-    toMap<K, V>(keySelectorFunction: (element: T) => K, valueSelectorFunction: (element: T) => V): Map<K, V>;
+    toMap<K, V>(keySelectorFunction: (element: T) => K, valueSelectorFunction: (element: T) => V,
+                duplicateResolverFunction: (key: K, previousValue: V, currentValue: V) => V =
+                (key, oldE, newE) => { throw `Duplicate value found for key: '${key}', previous value: '${oldE}', current value: '${newE}'` ;}): Map<K, V>;
 
     /**
      * Method for terminating the sequence and partitioning the elements into 2 arrays according to the given predicate
@@ -182,6 +193,13 @@ declare export class Sequence<T> {
      * @returns 2 arrays where the first one contains the elements that matched the predicate and the second one that didn't
      */
     partitionBy(predicateFunction: (element: T) => boolean): T[2][];
+
+    /**
+     * Method for terminating the sequence and chunking the elements of the sequence into arrays
+     * @param chunkSizes Max size of each chunk
+     * @returns 1 array containing arrays of the sequence's elements, with their maximum lengths restricted to the given chunk size
+     */
+    chunking(chunkSizes: number): T[][]
     groupingBy<K, V>(keySelectorFunction: (element: T) => K, grouperFunction: Grouper<V> = Grouper.toArray()): Map<K, V>;
 
     /**
