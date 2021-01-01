@@ -1,0 +1,27 @@
+name: Docs deploy
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+    - 'src/seq.d.ts'
+  workflow_dispatch:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Node.js
+      uses: actions/setup-node@v2.1.4
+    - name: Generate tsconfig file
+      run: "echo '{\"compilerOptions\":{\"module\": \"ESNext\",\"target\": \"ESNext\",\"moduleResolution\": \"Node\"}}' >> tsconfig.json"
+    - name: Generate docs
+      run: sudo npm install typedoc -g && typedoc src/seq.d.ts
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs

@@ -5,6 +5,8 @@
 - Not even close being complete
 
 # Usage
+## <a href = "https://degubi.github.io/JsSeq/">Docs</a>
+
 ## Importing:
 
 ```javascript
