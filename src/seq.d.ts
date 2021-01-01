@@ -1,6 +1,6 @@
 /**
  * Sequence class used for creating, manipulating & finishing sequences.
- * Sequences are created using static factories.
+ * Sequences are created using static factories or from arrays using .sequence().
  * @author Degubi
  */
 declare export class Sequence<T> {
@@ -86,7 +86,19 @@ declare export class Sequence<T> {
      * @returns New sequence with the first 'n' elements skipped
      */
     skip(count: number): Sequence<T>;
+
+    /**
+     * Method for creating a new sequence that takes elements until the given predicate returns false
+     * @param predicateFunction The function to test against
+     * @returns New sequence that takes elements until the given predicate returns false
+     */
     takeWhile(predicateFunction: (element: T) => boolean): Sequence<T>;
+
+    /**
+     * Method for creating a new sequence that drops elements until the given predicate returns true
+     * @param predicateFunction The function to test against
+     * @returns New sequence that drops elements until the given predicate returns true
+     */
     dropWhile(predicateFunction: (element: T) => boolean): Sequence<T>;
 
     /**
@@ -134,7 +146,7 @@ declare export class Sequence<T> {
     join(separator: string = ''): string;
 
     /**
-     * Method for getting the smallest element from the sequence.  
+     * Method for retrieving the smallest element from the sequence.  
      * Note: This function returns null if the sequence is empty
      * @param keySelectorFunction Function used for extracting the key from the object to compare against, defaults to identity
      * @returns The smallest element in the sequence according to the keySelector or null if the sequence was empty
@@ -142,7 +154,7 @@ declare export class Sequence<T> {
     min(keySelectorFunction: (element: T) => number = k => k): T?;
 
     /**
-     * Method for getting the largest element from the sequence.  
+     * Method for retrieving the largest element from the sequence.  
      * Note: This function returns null if the sequence is empty
      * @param keySelectorFunction Function used for extracting the key from the object to compare against, defaults to identity
      * @returns The largest element in the sequence according to the keySelector or null if the sequence was empty
@@ -150,11 +162,25 @@ declare export class Sequence<T> {
     max(keySelectorFunction: (element: T) => number = k => k): T?;
 
     /**
-     * Method for terminating the sequence while collecting the elements of the sequence into an array.
+     * Method for terminating the sequence and collecting the elements of the sequence into an array.
      * @returns An array containing the elements of the sequence
      */
     toArray(): T[];
+
+    /**
+     * Method for terminating the sequence and collecting the elements into an object using the key & value selector functions  
+     * TODO Need to add function for handling duplicate key insertion logic
+     * @param keySelectorFunction Function used for extracting the key from the object
+     * @param valueSelectorFunction Function used for extracting the value from the object
+     * @returns An object where the keys are populated using the keySelector and the corresponding values are the values returned by the valueSelector
+     */
     toMap<K, V>(keySelectorFunction: (element: T) => K, valueSelectorFunction: (element: T) => V): Map<K, V>;
+
+    /**
+     * Method for terminating the sequence and partitioning the elements into 2 arrays according to the given predicate
+     * @param predicateFunction The predicate to test against
+     * @returns 2 arrays where the first one contains the elements that matched the predicate and the second one that didn't
+     */
     partitionBy(predicateFunction: (element: T) => boolean): T[2][];
     groupingBy<K, V>(keySelectorFunction: (element: T) => K, grouperFunction: Grouper<V> = Grouper.toArray()): Map<K, V>;
 

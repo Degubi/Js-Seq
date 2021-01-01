@@ -57,17 +57,19 @@ seq.min();                           // Find the smallest value in the sequence,
 seq.max();                           // Find the largest value in the sequence, has key selector overload
 seq.average();                       // Average of the values in the sequence
 seq.toArray();                       // Collect all elements into an array
-seq.first();                         // Find the first element in the sequence, this returns an optional
-seq.last();                          // Find the last element in the sequence, this returns an optional
+seq.first();                         // Find the first element in the sequence, this returns the element or null
+seq.last();                          // Find the last element in the sequence, this returns the element or null
 seq.join(',');                       // Join elements with a comma
 
-const seq = Sequence.of({ prop1: 5, prop2: 'hey' }, { prop1: 20, prop2: 'hi' });
+const seq = Sequence.of({ prop1: 5, prop2: 'hey' }, { prop1: 20, prop2: 'hi' }, { prop1: 20, prop2: 'hey' });
 
-seq.toMap(k => k.prop1, k => k.prop2);              // Creates an object where the keys are from 'prop1' and the corresponding values are from 'prop2'
-seq.allMatches(k => k.prop1 > 0);                   // Returns true if the given predicate is true for all elements of the sequence
-seq.anyMatches(k => k.prop2 === 'nope');            // Returns true if the given predicate is true for any of the elements of the sequence
-seq.groupingBy(k => k.prop1, Grouper.counting());   // Groups elements by key, where the key is 'prop1' and the value is the frequency of the key
-seq.groupingBy(k => k.prop1);                       // Groups elements by key, this is as if it was called with Grouper.toArray() as the 2nd argument
+seq.toMap(k => k.prop1, k => k.prop2);                        // Creates an object where the keys are from 'prop1' and the corresponding values are from 'prop2'
+seq.allMatches(k => k.prop1 > 0);                             // Returns true if the given predicate is true for all elements of the sequence
+seq.anyMatches(k => k.prop2 === 'nope');                      // Returns true if the given predicate is true for any of the elements of the sequence
+seq.groupingBy(k => k.prop1);                                 // Groups elements by 'prop1' where the values are the objects that had the same key
+seq.groupingBy(k => k.prop1, Grouper.toArray());              // This does the same as the last example
+seq.groupingBy(k => k.prop1, Grouper.counting());             // Groups elements prop1' where the value is the frequency of the key
+seq.groupingBy(k => k.prop2, Grouper.summing(k => k.prop1));  // Groups elements by 'prop2' where the value is the sum of 'prop1'
 
 const [matching, notMatching] = seq.partitionBy(k => k.prop1 % 2 === 0);  // First array contains the elements where the predicate was true
 ```
