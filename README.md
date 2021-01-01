@@ -7,7 +7,7 @@
 - Not even close being complete
 
 # Usage
-## <a href = "https://degubi.github.io/JsSeq/">Docs</a>
+## <a href = "https://degubi.github.io/Js-Seq/">Docs</a>
 
 ## Importing:
 
@@ -33,21 +33,21 @@ Sequence.of(1, 3, 3, 7, 4, 2, 0)               // Sequence of specific elements
 <br>
 <table>
     <tr>
-        <td>filter</td>
-        <td>map</td>
-        <td>flatMap</td>
-        <td>distinct</td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#filter">filter</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#map">map</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#flatmap">flatMap</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#distinct">distinct</a></td>
     </tr>
     <tr>
-        <td>take</td>
-        <td>skip</td>
-        <td>takeWhile</td>
-        <td>skipWhile</td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#take">take</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#skip">skip</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#takewhile">takeWhile</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#skipwhile">skipWhile</a></td>
     </tr>
     <tr>
-        <td>sort</td>
-        <td>sortAscending</td>
-        <td>sortDescending</td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#sort">sort</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#sortascending">sortAscending</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#sortdescending">sortDescending</a></td>
         <td></td>
     </tr>
 </table>
@@ -78,29 +78,29 @@ Sequence.of({ data: [ 1, 2, 3, 4 ] }, { data: [ 5, 6, 7, 8 ] })
 <br>
 <table>
     <tr>
-        <td>forEach</td>
-        <td>reduce</td>
-        <td>toArray</td>
-        <td>toMap</td>
-        <td>partitionBy</td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#foreach">forEach</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#reduce">reduce</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#toarray">toArray</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#tomap">toMap</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#partitionby">partitionBy</a></td>
     </tr>
     <tr>
-        <td>sum</td>
-        <td>count</td>
-        <td>average</td>
-        <td>min</td>
-        <td>max</td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#sum">sum</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#count">count</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#average">average</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#min">min</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#max">max</a></td>
     </tr>
     <tr>
-        <td>chunking</td>
-        <td>groupingBy</td>
-        <td>first</td>
-        <td>last</td>
-        <td>join</td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#chunking">chunking</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#groupingby">groupingBy</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#first">first</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#last">last</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#join">join</a></td>
     </tr>
     <tr>
-        <td>allMatches</td>
-        <td>anyMatches</td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#allmatches">allMatches</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#anymatches">anyMatches</a></td>
     </tr>
 </table>
 <br>

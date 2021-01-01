@@ -1,7 +1,8 @@
 export class Sequence {
     
     constructor(generator) {
-        this._generator = generator;
+        this._generator = generator();
+        this._terminated = false;
     }
 
     static range(begin, end, increment = 1) {
@@ -31,39 +32,46 @@ export class Sequence {
 
 
     filter(predicateFunction) {
+        this._terminated = true;
         return new Sequence(() => generate_filter(predicateFunction, this._generator));
     }
 
     map(mapperFunction) {
+        this._terminated = true;
         return new Sequence(() => generate_map(mapperFunction, this._generator));
     }
 
     flatMap(nestMapperFunction) {
+        this._terminated = true;
         return new Sequence(() => generate_flatMap(nestMapperFunction, this._generator));
     }
 
     take(count) {
+        this._terminated = true;
         return new Sequence(() => generate_take(count, this._generator));
     }
 
     skip(count) {
+        this._terminated = true;
         return new Sequence(() => generate_skip(count, this._generator));
     }
 
     takeWhile(predicateFunction) {
+        this._terminated = true;
         return new Sequence(() => generate_takeWhile(predicateFunction, this._generator));
     }
 
     skipWhile(predicateFunction) {
+        this._terminated = true;
         return new Sequence(() => generate_skipWhile(predicateFunction, this._generator));
     }
 
     distinct(keySelectorFunction = k => k) {
-        const generator = this._generator();
+        this._terminated = true;
         const uniqueElements = [];
 
         generatorLoop:
-        for(const e of generator) {
+        for(const e of this._generator) {
             const elementKeySelected = keySelectorFunction(e);
 
             for(const uniq of uniqueElements) {
@@ -80,6 +88,7 @@ export class Sequence {
 
     sort(comparerFunction) {
         const allElements = this.toArray();
+        this._terminated = true;
 
         allElements.sort(comparerFunction);
 
@@ -106,15 +115,23 @@ export class Sequence {
 
 
     forEach(consumerFunction) {
-        const generator = this._generator();
+        checkTerminated(this);
 
-        for(const e of generator) {
+        for(const e of this._generator) {
             consumerFunction(e);
         }
     }
 
     reduce(seed, accumulatorFunction) {
-        return _reduce(seed, this._generator(), accumulatorFunction);
+        checkTerminated(this);
+
+        let returnVal = seed;
+    
+        for(const e of this._generator) {
+            returnVal = accumulatorFunction(returnVal, e);
+        }
+    
+        return returnVal;
     }
 
     sum() {
@@ -126,7 +143,7 @@ export class Sequence {
     }
 
     average() {
-        const { sum, count } = _collect({ count: 0, sum: 0 }, this._generator(), (accumulator, nextElement) => { ++accumulator.count; accumulator.sum += nextElement; });
+        const { sum, count } = _collect({ count: 0, sum: 0 }, this, (accumulator, nextElement) => { ++accumulator.count; accumulator.sum += nextElement; });
 
         return count === 0 ? null : sum / count;
     }
@@ -136,35 +153,33 @@ export class Sequence {
     }
 
     min(keySelector = k => k) {
-        const generator = this._generator();
-        const firstElement = generator.next();
+        const firstElement = this._generator.next();
 
         if(firstElement.done) {
             return null;
         }
 
-        return _reduce(firstElement.value, generator, (accumulator, nextElement) => keySelector(accumulator) < keySelector(nextElement) ? accumulator : nextElement);
+        return this.reduce(firstElement.value, (accumulator, nextElement) => keySelector(accumulator) < keySelector(nextElement) ? accumulator : nextElement);
     }
 
     max(keySelector = k => k) {
-        const generator = this._generator();
-        const firstElement = generator.next();
+        const firstElement = this._generator.next();
 
         if(firstElement.done) {
             return null;
         }
 
-        return _reduce(firstElement.value, generator, (accumulator, nextElement) => keySelector(accumulator) > keySelector(nextElement) ? accumulator : nextElement);
+        return this.reduce(firstElement.value, (accumulator, nextElement) => keySelector(accumulator) > keySelector(nextElement) ? accumulator : nextElement);
     }
 
     toArray() {
-        return _collect([], this._generator(), (result, element) => result.push(element));
+        return _collect([], this, (result, element) => result.push(element));
     }
 
     toMap(keySelectorFunction, valueSelectorFunction,
           duplicateResolverFunction = (key, oldE, newE) => { throw `Duplicate value found for key: '${key}', previous value: '${oldE}', current value: '${newE}'`;}) {
 
-        return _collect({}, this._generator(), (result, element) => {
+        return _collect({}, this, (result, element) => {
             const key = keySelectorFunction(element);
             const value = valueSelectorFunction(element);
 
@@ -177,14 +192,13 @@ export class Sequence {
     }
 
     partitionBy(predicateFunction) {
-        return _collect([[], []], this._generator(), (result, element) => result[predicateFunction(element) === true ? 0 : 1].push(element));
+        return _collect([[], []], this, (result, element) => result[predicateFunction(element) === true ? 0 : 1].push(element));
     }
 
     chunking(chunkSizes) {
-        const generator = this._generator();
-        const firstElement = generator.next();
+        const firstElement = this._generator.next();
 
-        return firstElement.done ? [] : _collect([[ firstElement.value ]], generator, (result, element) => {
+        return firstElement.done ? [] : _collect([[ firstElement.value ]], this, (result, element) => {
             const lastArray = result[result.length - 1];
 
             if(lastArray.length === chunkSizes) {
@@ -196,17 +210,17 @@ export class Sequence {
     }
 
     groupingBy(keySelectorFunction, grouperFunction = Grouper.toArray()) {
-        const result = _collect({}, this._generator(), (result, element) => {
+        const result = _collect({}, this, (result, element) => {
             const mappedKey = keySelectorFunction(element);
 
             if(result[mappedKey] === undefined) {
-                result[mappedKey] = grouperFunction.accumulatorSupplier();
+                result[mappedKey] = grouperFunction._accumulatorSupplier();
             }
 
-            grouperFunction.accumulatorFunction(result, mappedKey, element);
+            grouperFunction._accumulatorFunction(result, mappedKey, element);
         });
 
-        const finisherFunction = grouperFunction.finisherFunction;
+        const finisherFunction = grouperFunction._finisherFunction;
         if(finisherFunction) {
             for(const [key, value] of Object.entries(result)) {
                 finisherFunction(result, key, value);
@@ -217,21 +231,23 @@ export class Sequence {
     }
 
     first() {
-        const firstElement = this._generator().next();
+        checkTerminated(this);
+
+        const firstElement = this._generator.next();
 
         return firstElement.done ? null : firstElement.value;
     }
 
     last() {
-        const firstElement = this._generator().next();
+        const firstElement = this._generator.next();
 
         return firstElement.done ? null : this.reduce(firstElement.value, (_, nextElement) => nextElement);
     }
 
     allMatches(predicateFunction) {
-        const generator = this._generator();
+        checkTerminated(this);
 
-        for(const e of generator) {
+        for(const e of this._generator) {
             if(predicateFunction(e) === false) {
                 return false;
             }
@@ -241,9 +257,9 @@ export class Sequence {
     }
 
     anyMatches(predicateFunction) {
-        const generator = this._generator();
+        checkTerminated(this);
 
-        for(const e of generator) {
+        for(const e of this._generator) {
             if(predicateFunction(e) === true) {
                 return true;
             }
@@ -257,30 +273,30 @@ export class Grouper {
 
     static toArray() {
         return {
-            accumulatorSupplier: () => [],
-            accumulatorFunction: (accumulator, key, element) => accumulator[key].push(element)
+            _accumulatorSupplier: () => [],
+            _accumulatorFunction: (accumulator, key, element) => accumulator[key].push(element)
         }
     }
 
     static counting() {
         return {
-            accumulatorSupplier: () => 0,
-            accumulatorFunction: (accumulator, key, _) => ++accumulator[key]
+            _accumulatorSupplier: () => 0,
+            _accumulatorFunction: (accumulator, key, _) => ++accumulator[key]
         }
     }
 
     static summing(keySelector) {
         return {
-            accumulatorSupplier: () => 0,
-            accumulatorFunction: (accumulator, key, element) => accumulator[key] += keySelector(element)
+            _accumulatorSupplier: () => 0,
+            _accumulatorFunction: (accumulator, key, element) => accumulator[key] += keySelector(element)
         }
     }
 
     static averaging(keySelector) {
         return {
-            accumulatorSupplier: () => ({ sum: 0, count: 0 }),
-            accumulatorFunction: (accumulator, key, element) => { accumulator[key].sum += keySelector(element); ++accumulator[key].count; },
-            finisherFunction: (result, key, value) => result[key] = value.sum / value.count
+            _accumulatorSupplier: () => ({ sum: 0, count: 0 }),
+            _accumulatorFunction: (accumulator, key, element) => { accumulator[key].sum += keySelector(element); ++accumulator[key].count; },
+            _finisherFunction: (result, key, value) => result[key] = value.sum / value.count
         }
     }
 }
@@ -290,22 +306,22 @@ Array.prototype.sequence = function() {
 }
 
 
-function _reduce(seed, generator, accumulatorFunction) {
-    let returnVal = seed;
+function _collect(result, sequenceInstance, accumulatorFunction) {
+    checkTerminated(sequenceInstance);
 
-    for(const e of generator) {
-        returnVal = accumulatorFunction(returnVal, e);
-    }
-
-    return returnVal;
-}
-
-function _collect(result, generator, accumulatorFunction) {
-    for(const e of generator) {
+    for(const e of sequenceInstance._generator) {
         accumulatorFunction(result, e);
     }
 
     return result;
+}
+
+function checkTerminated(sequenceInstance) {
+    if(sequenceInstance._terminated) {
+        throw new Error('Sequence was already terminated!');
+    }
+
+    sequenceInstance._terminated = true;
 }
 
 
@@ -315,31 +331,29 @@ function* generate_range(begin, end, increment) {
     }
 }
 
-function* generate_iterate(seed, generator, limiter) {
-    for(let i = seed; limiter(i) === true; i = generator(i)) {
+function* generate_iterate(seed, generatorFunction, limiter) {
+    for(let i = seed; limiter(i) === true; i = generatorFunction(i)) {
         yield i;
     }
 }
 
-function* generate_of(elements) {
-    for(const e of elements) {
+function* generate_of(iterableObject) {
+    for(const e of iterableObject) {
         yield e;
     }
 }
 
 function* generate_empty() {}
 
-function* generate_generate(generator) {
+function* generate_generate(supplierFunction) {
     while(true) {
-        yield generator();
+        yield supplierFunction();
     }
 }
 
-function* generate_filter(predicate, oldGeneratorRef) {
-    const generator = oldGeneratorRef();
-
+function* generate_filter(predicate, generatorInstance) {
     while(true) {
-        const nextElement = generator.next();
+        const nextElement = generatorInstance.next();
 
         if(nextElement.done) {
             break;
@@ -351,11 +365,9 @@ function* generate_filter(predicate, oldGeneratorRef) {
     }
 }
 
-function* generate_map(mapper, oldGeneratorRef) {
-    const generator = oldGeneratorRef();
-
+function* generate_map(mapper, generatorInstance) {
     while(true) {
-        const nextElement = generator.next();
+        const nextElement = generatorInstance.next();
 
         if(nextElement.done) {
             break;
@@ -365,10 +377,8 @@ function* generate_map(mapper, oldGeneratorRef) {
     }
 }
 
-function* generate_flatMap(mapper, oldGeneratorRef) {
-    const generator = oldGeneratorRef();
-
-    for(const element of generator) {
+function* generate_flatMap(mapper, generatorInstance) {
+    for(const element of generatorInstance) {
         const nested = mapper(element);
 
         for(const n of nested) {
@@ -377,12 +387,11 @@ function* generate_flatMap(mapper, oldGeneratorRef) {
     }
 }
 
-function* generate_take(count, oldGeneratorRef) {
-    const generator = oldGeneratorRef();
+function* generate_take(count, generatorInstance) {
     let yieldedCount = 0;
 
     while(true) {
-        const nextElement = generator.next();
+        const nextElement = generatorInstance.next();
 
         if(nextElement.done || yieldedCount === count) {
             break;
@@ -393,12 +402,11 @@ function* generate_take(count, oldGeneratorRef) {
     }
 }
 
-function* generate_skip(count, oldGeneratorRef) {
-    const generator = oldGeneratorRef();
+function* generate_skip(count, generatorInstance) {
     let skippedCount = 0;
 
     while(true) {
-        const nextElement = generator.next();
+        const nextElement = generatorInstance.next();
 
         if(nextElement.done) {
             break;
@@ -410,11 +418,9 @@ function* generate_skip(count, oldGeneratorRef) {
     }
 }
 
-function* generate_takeWhile(predicate, oldGeneratorRef) {
-    const generator = oldGeneratorRef();
-
+function* generate_takeWhile(predicate, generatorInstance) {
     while(true) {
-        const nextElement = generator.next();
+        const nextElement = generatorInstance.next();
 
         if(nextElement.done || predicate(nextElement.value) === false) {
             break;
@@ -424,11 +430,9 @@ function* generate_takeWhile(predicate, oldGeneratorRef) {
     }
 }
 
-function* generate_skipWhile(predicate, oldGeneratorRef) {
-    const generator = oldGeneratorRef();
-    
+function* generate_skipWhile(predicate, generatorInstance) {    
     while(true) {
-        const nextElement = generator.next();
+        const nextElement = generatorInstance.next();
 
         if(nextElement.done) {
             return;
@@ -440,7 +444,7 @@ function* generate_skipWhile(predicate, oldGeneratorRef) {
         }
     }
 
-    for(const remaining of generator) {
+    for(const remaining of generatorInstance) {
         yield remaining;
     }
 }
