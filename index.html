@@ -1,0 +1,249 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>jsseq</title>
+	<meta name="description" content="Documentation for jsseq">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">jsseq</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<h1>jsseq</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#javascript-functional-sequence-processing-library" id="javascript-functional-sequence-processing-library" style="color: inherit; text-decoration: none;">
+					<h1>Javascript functional sequence processing library</h1>
+				</a>
+				<ul>
+					<li>The api is very similar to java8 streams</li>
+					<li>Lazy by default</li>
+					<li>Made because of boredom</li>
+					<li>Not even close being complete</li>
+				</ul>
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h1>Usage</h1>
+				</a>
+				<a href="#importing" id="importing" style="color: inherit; text-decoration: none;">
+					<h2>Importing:</h2>
+				</a>
+				<pre><code class="language-javascript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">Sequence</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;./seq.js&#039;</span><span style="color: #000000">;</span>
+</code></pre>
+				<a href="#creating-sequences" id="creating-sequences" style="color: inherit; text-decoration: none;">
+					<h2>Creating sequences:</h2>
+				</a>
+				<pre><code class="language-javascript"><span style="color: #001080">Sequence</span><span style="color: #000000">.</span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">10</span><span style="color: #000000">);                         </span><span style="color: #008000">// 1 to 10 excluding 10</span>
+<span style="color: #001080">Sequence</span><span style="color: #000000">.</span><span style="color: #795E26">rangeClosed</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">10</span><span style="color: #000000">)                    </span><span style="color: #008000">// 1 to 10 including 10</span>
+<span style="color: #001080">Sequence</span><span style="color: #000000">.</span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">10</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">);                      </span><span style="color: #008000">// 1 to 10 stepping 2, excluding 10</span>
+<span style="color: #001080">Sequence</span><span style="color: #000000">.</span><span style="color: #795E26">iterate</span><span style="color: #000000">(</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000"> * </span><span style="color: #098658">2</span><span style="color: #000000">)                </span><span style="color: #008000">// 1, 2, 4, 8.... this sequence is infinite</span>
+<span style="color: #001080">Sequence</span><span style="color: #000000">.</span><span style="color: #795E26">iterate</span><span style="color: #000000">(</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000"> * </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000"> &lt; </span><span style="color: #098658">50</span><span style="color: #000000">)   </span><span style="color: #008000">// Same as the last one but taking values less than 50 (same as doing a takeWhile)</span>
+<span style="color: #001080">Sequence</span><span style="color: #000000">.</span><span style="color: #795E26">generate</span><span style="color: #000000">(</span><span style="color: #001080">readline</span><span style="color: #000000">)                    </span><span style="color: #008000">// Generate strings with reading from console</span>
+<span style="color: #001080">Sequence</span><span style="color: #000000">.</span><span style="color: #795E26">of</span><span style="color: #000000">(</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">7</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">0</span><span style="color: #000000">)               </span><span style="color: #008000">// Sequence of specific elements</span>
+<span style="color: #000000">[ </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000"> ].</span><span style="color: #795E26">sequence</span><span style="color: #000000">()                         </span><span style="color: #008000">// Create sequence from array</span>
+</code></pre>
+				<a href="#transforming-sequences-intermediate-operations" id="transforming-sequences-intermediate-operations" style="color: inherit; text-decoration: none;">
+					<h2>Transforming sequences (intermediate operations):</h2>
+				</a>
+				<ul>
+					<li>These operations do nothing by themselves, they only start doing work when the terminal operation gets called</li>
+					<li>Function list:</li>
+				</ul>
+				<br>
+				<table>
+					<tr>
+						<td>filter</td>
+						<td>map</td>
+						<td>flatMap</td>
+						<td>distinct</td>
+					</tr>
+					<tr>
+						<td>take</td>
+						<td>skip</td>
+						<td>takeWhile</td>
+						<td>skipWhile</td>
+					</tr>
+					<tr>
+						<td>sort</td>
+						<td>sortAscending</td>
+						<td>sortDescending</td>
+						<td></td>
+					</tr>
+				</table>
+				<br>
+				<ul>
+					<li>Examples:</li>
+				</ul>
+				<pre><code class="language-javascript"><span style="color: #001080">Sequence</span><span style="color: #000000">.</span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">100</span><span style="color: #000000">);             </span><span style="color: #008000">// Need to create a new sequence with every new pipeline</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000"> % </span><span style="color: #098658">2</span><span style="color: #000000"> === </span><span style="color: #098658">0</span><span style="color: #000000">)   </span><span style="color: #008000">// Keep only even values in the sequence</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">map</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000"> * </span><span style="color: #098658">2</span><span style="color: #000000">)            </span><span style="color: #008000">// Multiply them by 2</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">skip</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">)                    </span><span style="color: #008000">// Skip the first 2 elements</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">take</span><span style="color: #000000">(</span><span style="color: #098658">10</span><span style="color: #000000">)                   </span><span style="color: #008000">// Take the first 10 elements only</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">sortAscending</span><span style="color: #000000">()            </span><span style="color: #008000">// Sort them in ascending order</span>
+
+<span style="color: #001080">Sequence</span><span style="color: #000000">.</span><span style="color: #795E26">of</span><span style="color: #000000">({ </span><span style="color: #001080">prop1:</span><span style="color: #000000"> </span><span style="color: #098658">5</span><span style="color: #000000">, </span><span style="color: #001080">prop2:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;hey&#039;</span><span style="color: #000000"> }, { </span><span style="color: #001080">prop1:</span><span style="color: #000000"> </span><span style="color: #098658">5</span><span style="color: #000000">, </span><span style="color: #001080">prop2:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;ho&#039;</span><span style="color: #000000">}, { </span><span style="color: #001080">prop1:</span><span style="color: #000000"> </span><span style="color: #098658">20</span><span style="color: #000000">, </span><span style="color: #001080">prop2:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;hi&#039;</span><span style="color: #000000"> })</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">distinct</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop1</span><span style="color: #000000">)         </span><span style="color: #008000">// Many functions have key selecting overloads, default is always identity</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">sortDescending</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop1</span><span style="color: #000000">)   </span><span style="color: #008000">// Same happens here</span>
+
+<span style="color: #001080">Sequence</span><span style="color: #000000">.</span><span style="color: #795E26">of</span><span style="color: #000000">({ </span><span style="color: #001080">data:</span><span style="color: #000000"> [ </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000"> ] }, { </span><span style="color: #001080">data:</span><span style="color: #000000"> [ </span><span style="color: #098658">5</span><span style="color: #000000">, </span><span style="color: #098658">6</span><span style="color: #000000">, </span><span style="color: #098658">7</span><span style="color: #000000">, </span><span style="color: #098658">8</span><span style="color: #000000"> ] })</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">flatMap</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">data</span><span style="color: #000000">)</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">takeWhile</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000"> &lt; </span><span style="color: #098658">6</span><span style="color: #000000">)</span>
+</code></pre>
+				<a href="#finishing-sequences-terminal-operations" id="finishing-sequences-terminal-operations" style="color: inherit; text-decoration: none;">
+					<h2>Finishing sequences (terminal operations):</h2>
+				</a>
+				<ul>
+					<li>Function list:</li>
+				</ul>
+				<br>
+				<table>
+					<tr>
+						<td>forEach</td>
+						<td>reduce</td>
+						<td>toArray</td>
+						<td>toMap</td>
+						<td>partitionBy</td>
+					</tr>
+					<tr>
+						<td>sum</td>
+						<td>count</td>
+						<td>average</td>
+						<td>min</td>
+						<td>max</td>
+					</tr>
+					<tr>
+						<td>chunking</td>
+						<td>groupingBy</td>
+						<td>first</td>
+						<td>last</td>
+						<td>join</td>
+					</tr>
+					<tr>
+						<td>allMatches</td>
+						<td>anyMatches</td>
+					</tr>
+				</table>
+				<br>
+				<ul>
+					<li>Examples</li>
+				</ul>
+				<pre><code class="language-javascript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">seq</span><span style="color: #000000"> = </span><span style="color: #001080">Sequence</span><span style="color: #000000">.</span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">100</span><span style="color: #000000">); </span><span style="color: #008000">// Let&#039;s assume we recreate this sequence every time</span>
+
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">forEach</span><span style="color: #000000">(</span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #001080">log</span><span style="color: #000000">);           </span><span style="color: #008000">// Print every value to the console</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">reduce</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">, (</span><span style="color: #001080">k</span><span style="color: #000000">, </span><span style="color: #001080">l</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000"> + </span><span style="color: #001080">l</span><span style="color: #000000">);     </span><span style="color: #008000">// Sum all values</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">sum</span><span style="color: #000000">();                          </span><span style="color: #008000">// Shorthand for summing</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">count</span><span style="color: #000000">();                        </span><span style="color: #008000">// Count number of elements in sequence</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">min</span><span style="color: #000000">();                          </span><span style="color: #008000">// Find the smallest value in the sequence, has key selector overload</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">max</span><span style="color: #000000">();                          </span><span style="color: #008000">// Find the largest value in the sequence, has key selector overload</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">average</span><span style="color: #000000">();                      </span><span style="color: #008000">// Average of the values in the sequence</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">toArray</span><span style="color: #000000">();                      </span><span style="color: #008000">// Collect all elements into an array</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">first</span><span style="color: #000000">();                        </span><span style="color: #008000">// Find the first element in the sequence, this returns the element or null</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">last</span><span style="color: #000000">();                         </span><span style="color: #008000">// Find the last element in the sequence, this returns the element or null</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">join</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;,&#039;</span><span style="color: #000000">);                      </span><span style="color: #008000">// Join elements with a comma</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">seq</span><span style="color: #000000"> = </span><span style="color: #001080">Sequence</span><span style="color: #000000">.</span><span style="color: #795E26">of</span><span style="color: #000000">({ </span><span style="color: #001080">prop1:</span><span style="color: #000000"> </span><span style="color: #098658">5</span><span style="color: #000000">, </span><span style="color: #001080">prop2:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;hey&#039;</span><span style="color: #000000"> }, { </span><span style="color: #001080">prop1:</span><span style="color: #000000"> </span><span style="color: #098658">20</span><span style="color: #000000">, </span><span style="color: #001080">prop2:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;hi&#039;</span><span style="color: #000000"> }, { </span><span style="color: #001080">prop1:</span><span style="color: #000000"> </span><span style="color: #098658">20</span><span style="color: #000000">, </span><span style="color: #001080">prop2:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;hey&#039;</span><span style="color: #000000"> });</span>
+
+<span style="color: #008000">// Creates an object where the keys are from &#039;prop1&#039; and the corresponding values are from &#039;prop2&#039;</span>
+<span style="color: #008000">// Note: This call throws an error because of the duplicate &#039;prop1: 20&#039; key</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">toMap</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop1</span><span style="color: #000000">, </span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop2</span><span style="color: #000000">);</span>
+
+<span style="color: #008000">// This is the same as the last example, but this version handles the duplicate key problem by keeping the first value</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">toMap</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop1</span><span style="color: #000000">, </span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop2</span><span style="color: #000000">, (</span><span style="color: #001080">key</span><span style="color: #000000">, </span><span style="color: #001080">previousValue</span><span style="color: #000000">, </span><span style="color: #001080">currentValue</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">previousValue</span><span style="color: #000000">);</span>
+
+<span style="color: #008000">// Returns true if the given predicate is true for all elements of the sequence</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">allMatches</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop1</span><span style="color: #000000"> &gt; </span><span style="color: #098658">0</span><span style="color: #000000">);</span>
+
+<span style="color: #008000">// Returns true if the given predicate is true for any of the elements of the sequence</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">anyMatches</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop2</span><span style="color: #000000"> === </span><span style="color: #A31515">&#039;nope&#039;</span><span style="color: #000000">);</span>
+
+<span style="color: #008000">// Groups elements by &#039;prop1&#039; where the values are the objects that had the same key</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">groupingBy</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop1</span><span style="color: #000000">);</span>
+
+<span style="color: #008000">// This does the same as the last example</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">groupingBy</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop1</span><span style="color: #000000">, </span><span style="color: #001080">Grouper</span><span style="color: #000000">.</span><span style="color: #795E26">toArray</span><span style="color: #000000">());</span>
+
+<span style="color: #008000">// Groups elements prop1&#039; where the value is the frequency of the key</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">groupingBy</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop1</span><span style="color: #000000">, </span><span style="color: #001080">Grouper</span><span style="color: #000000">.</span><span style="color: #795E26">counting</span><span style="color: #000000">());</span>
+
+<span style="color: #008000">// Groups elements by &#039;prop2&#039; where the value is the sum of &#039;prop1&#039;</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">groupingBy</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop2</span><span style="color: #000000">, </span><span style="color: #001080">Grouper</span><span style="color: #000000">.</span><span style="color: #795E26">summing</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop1</span><span style="color: #000000">));</span>
+
+<span style="color: #008000">// First array contains the elements where the predicate was true</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> [</span><span style="color: #0070C1">matching</span><span style="color: #000000">, </span><span style="color: #0070C1">notMatching</span><span style="color: #000000">] = </span><span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">partitionBy</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop1</span><span style="color: #000000"> % </span><span style="color: #098658">2</span><span style="color: #000000"> === </span><span style="color: #098658">0</span><span style="color: #000000">);</span>
+</code></pre>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="modules.html">Exports</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
