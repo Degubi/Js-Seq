@@ -1,12 +1,13 @@
 {
-    "name": "js-seq",
+    "name": "@degubi/js-seq",
     "version": "1.0.0",
     "type": "module",
     "author": {
         "name": "Degubi"
     },
     "license": "Free for all use. Contribute back if you can :)",
-    "types": "seq.d.ts",
+    "main": "src/seq.js",
+    "types": "src/seq.d.ts",
     "devDependencies": {
         "jest": "^26.6.3",
         "terser": "^5.5.1"
@@ -14,5 +15,9 @@
     "scripts": {
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
         "build": "node build.js"
-    }
+    },
+    "files": [
+        "src/seq.js",
+        "src/seq.d.ts"
+    ]
 }
