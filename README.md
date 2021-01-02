@@ -33,8 +33,8 @@ Sequence.range(0, 10, 2);                      // 1 to 10 stepping 2, excluding 
 Sequence.iterate(1, k => k * 2)                // 1, 2, 4, 8.... this sequence is infinite
 Sequence.iterate(1, k => k * 2, k => k < 50)   // Same as the last one but taking values less than 50 (same as doing a takeWhile)
 Sequence.generate(readline)                    // Generate strings with reading from console
-Sequence.of(1, 3, 3, 7, 4, 2, 0)               // Sequence of specific elements
-[ 1, 2, 3 ].sequence()                         // Create sequence from array
+Sequence.of(1, 3, 3, 7, 4, 2, 0)               // Sequence of elements
+Sequence.of([ 1, 2, 3 ])                       // Create sequence from array
 ```
 
 ## Transforming sequences (intermediate operations):

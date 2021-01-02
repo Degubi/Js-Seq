@@ -26,7 +26,8 @@ export class Sequence {
     }
 
     static of(...elements) {
-        return new Sequence(() => generate_of(elements));
+        return elements.length === 1 && Array.isArray(elements[0]) ? new Sequence(() => generate_of(elements[0]))
+                                                                   : new Sequence(() => generate_of(elements));
     }
 
 
@@ -276,10 +277,6 @@ export class Grouper {
             _finisherFunction: (result, key, value) => result[key] = value.sum / value.count
         }
     }
-}
-
-Array.prototype.sequence = function() {
-    return new Sequence(() => generate_of(this));
 }
 
 
