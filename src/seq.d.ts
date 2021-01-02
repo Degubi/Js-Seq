@@ -51,7 +51,6 @@ export declare class Sequence<T> {
 
     /**
      * Function for creating a sequence of elements using the passed in elements as the source.  
-     * Note: this is not the same as calling Array.sequence, do not pass in an array into this function.
      * @param elements Input elements
      * @returns Sequence populated from the input elements
      */
@@ -289,15 +288,4 @@ export declare class Grouper<V> {
      * @returns A new grouper instance
      */
     static averaging<K>(keySelectorFunction: (element: K) => number): Grouper<number>;
-}
-
-declare global {
-    interface Array<T> {
-
-        /**
-        * Method for creating a sequence of elements using this array as the source.  
-        * @returns Sequence populated from this array
-        */
-        sequence(): Sequence<T>;
-    }
 }
