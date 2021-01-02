@@ -25,6 +25,10 @@ test('Create sequence using empty', () =>
     expect(sources.empty().allMatches(k => k % 2 === 0))
     .toBeTruthy());
 
+test('Use already terminated sequence', () =>
+    expect(() => sources.terminated().allMatches(k => k === k))
+    .toThrowError());
+
 test('Test filter', () =>
     expect(sources.filter().allMatches(k => k % 2 === 0))
     .toBeTruthy());

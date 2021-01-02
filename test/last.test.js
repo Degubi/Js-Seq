@@ -25,6 +25,10 @@ test('Create sequence using empty', () =>
     expect(sources.empty().last())
     .toBeNull());
 
+test('Use already terminated sequence', () =>
+    expect(() => sources.terminated().last())
+    .toThrowError());
+
 test('Test filter', () =>
     expect(sources.filter().last())
     .toEqual(4));

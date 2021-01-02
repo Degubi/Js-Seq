@@ -25,6 +25,10 @@ test('Create sequence using empty', () =>
     expect(forEachOpHelper(sources.empty()))
     .toStrictEqual([ ]));
 
+test('Use already terminated sequence', () =>
+    expect(() => forEachOpHelper(sources.terminated()))
+    .toThrowError());
+
 test('Test filter', () =>
     expect(forEachOpHelper(sources.filter()))
     .toStrictEqual([ 0, 2, 4 ]));

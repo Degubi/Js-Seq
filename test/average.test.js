@@ -25,6 +25,10 @@ test('Create sequence using empty', () =>
     expect(sources.empty().average())
     .toBeNull());
 
+test('Use already terminated sequence', () =>
+    expect(() => sources.terminated().average())
+    .toThrowError());
+
 test('Test filter', () =>
     expect(sources.filter().average())
     .toEqual(2));

@@ -10,19 +10,19 @@ export declare class Sequence<T> {
      * Function for creating a sequence of numbers using a non inclusive number range generator.
      * @param begin The first value of the range
      * @param end The last value of the range
-     * @param increment Default is 1
+     * @param step Default is 1
      * @returns Sequence from begin-to stepping with increment
      */
-    static range(begin: number, end: number, increment: number): Sequence<number>;
+    static range(begin: number, end: number, step: number): Sequence<number>;
 
     /**
      * Function for creating a sequence of numbers using an inclusive number range generator.
      * @param begin The first value of the range
      * @param end The last value of the range
-     * @param increment Default is 1
-     * @returns Sequence from begin-to stepping with increment
+     * @param step Default is 1
+     * @returns Sequence from begin-to stepping with step
      */
-    static rangeClosed(begin: number, end: number, increment: number): Sequence<number>;
+    static rangeClosed(begin: number, end: number, step: number): Sequence<number>;
 
     /**
      * Function for creating a sequence of elements using the seed as a base value and then applying the generator function to it,
@@ -108,14 +108,31 @@ export declare class Sequence<T> {
     skipWhile(predicateFunction: (element: T) => boolean): Sequence<T>;
 
     /**
-     * Method for creating a new sequence containing only unique values.  
-     * Note: This is a stateful operation.
+     * Method for creating a new sequence containing only unique values.
      * @param The Function for selecting a key for uniqueness, defaults to identity
      * @returns New sequence containing distinct elements according to the input function
      */
     distinct(keySelectorFunction: (element: T) => any): Sequence<T>;
+
+    /**
+     * Method for creating a new sequence where the elements are sorted based on the given comparer
+     * @param comparerFunction This function has the same properties as the comparer function given to Array.sort
+     * @returns New sequence with elements are sorted based on the given comparer
+     */
     sort(comparerFunction: (element1: T, element2: T) => number): Sequence<T>;
+
+    /**
+     * Method for creating a new sequence where the elements are sorted in ascending order based on the given keySelector
+     * @param keySelectorFunction Function for selecting a key property to be used for sorting, defaults to identity
+     * @returns New sequence with elements sorted in ascending order based on the given keySelector
+     */
     sortAscending(keySelectorFunction: (element: T) => any): Sequence<T>;
+
+    /**
+     * Method for creating a new sequence where the elements are sorted in descending order based on the given keySelector
+     * @param keySelectorFunction Function for selecting a key property to be used for sorting, defaults to identity
+     * @returns New sequence with elements sorted in descending order based on the given keySelector
+     */
     sortDescending(keySelectorFunction: (element: T) => any): Sequence<T>;
 
     
@@ -125,6 +142,13 @@ export declare class Sequence<T> {
      * @returns Nothing
      */
     forEach(consumerFunction: (element: T) => void): void;
+
+    /**
+     * Method for terminating the sequence and peforming a reduction on the elements of the sequence.
+     * @param seed Used as an 'initial' or 'base' value
+     * @param accumulatorFunction Function used for combining the accumulator and the current element
+     * @returns Result of the reduction
+     */
     reduce<TT>(seed: TT, accumulatorFunction: (accumulator: TT, element: T) => TT): TT;
 
     /**
@@ -148,7 +172,7 @@ export declare class Sequence<T> {
 
     /**
      * Method for terminating the sequence while joining the elements together using the given separator.
-     * @param separator The separator used for joining the elements
+     * @param separator The separator used for joining the elements, defaults to empty string
      * @returns The final joined string
      */
     join(separator: string): string;
@@ -199,6 +223,13 @@ export declare class Sequence<T> {
      * @returns 1 array containing arrays of the sequence's elements, with their maximum lengths restricted to the given chunk size
      */
     chunking(chunkSizes: number): T[][]
+
+    /**
+     * Method for terminating the sequence and performing a grouping by operation on the elements of the sequence
+     * @param keySelectorFunction Function used for extracting the keys of the result
+     * @param grouperFunction An instance of a Grouper object, defaults to Grouper.toArray()
+     * @returns The result of the grouping
+     */
     groupingBy<K, V>(keySelectorFunction: (element: T) => K, grouperFunction: Grouper<V>): Map<K, V>;
 
     /**
@@ -247,12 +278,14 @@ export declare class Grouper<V> {
 
     /**
      * Creates a grouper function that maps each key to the sum of the keySelector's key.
+     * @param keySelectorFunction Function used for extracting the property to calculate the sum of
      * @returns A new grouper instance
      */
     static summing<K>(keySelectorFunction: (element: K) => number): Grouper<number>;
 
     /**
      * Creates a grouper function that maps each key to the average of the keySelector's key.
+     * @param keySelectorFunction Function used for extracting the property to calculate the average of
      * @returns A new grouper instance
      */
     static averaging<K>(keySelectorFunction: (element: K) => number): Grouper<number>;

@@ -25,6 +25,10 @@ test('Create sequence using empty', () =>
     expect(sources.empty().chunking(42))
     .toStrictEqual([ ]));
 
+test('Use already terminated sequence', () =>
+    expect(() => sources.terminated().chunking(420))
+    .toThrowError());
+
 test('Test filter', () =>
     expect(sources.filter().chunking(2))
     .toStrictEqual([[ 0, 2 ], [ 4 ]]));

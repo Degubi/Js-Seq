@@ -1,14 +1,13 @@
 # Javascript functional sequence processing library
-![Run tests](https://github.com/Degubi/JsSeq/workflows/Run%20tests/badge.svg)
+[![Run tests](https://github.com/Degubi/JsSeq/workflows/Run%20tests/badge.svg)](https://github.com/Degubi/Js-Seq/actions?query=workflow%3A%22Run+tests%22)
+![Dependencies](https://img.shields.io/badge/dependencies-none-green.svg?style=flat)
 
 - The api is very similar to java8 streams
 - Lazy by default
 - Made because of boredom
 - Not even close being complete
 
-# Usage
-## <a href = "https://degubi.github.io/Js-Seq/">Docs</a>
-
+# Usage <a href = "https://degubi.github.io/Js-Seq/">(Docs)</a>
 ## Importing:
 
 ```javascript

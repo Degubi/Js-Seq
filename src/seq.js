@@ -5,12 +5,12 @@ export class Sequence {
         this._terminated = false;
     }
 
-    static range(begin, end, increment = 1) {
-        return new Sequence(() => generate_range(begin, end, increment));
+    static range(begin, end, step = 1) {
+        return new Sequence(() => generate_range(begin, end, step));
     }
 
-    static rangeClosed(begin, end, increment = 1) {
-        return Sequence.range(begin, end + 1, increment);
+    static rangeClosed(begin, end, step = 1) {
+        return Sequence.range(begin, end + 1, step);
     }
 
     static iterate(seed, generatorFunction, limiterPredicateFunction = _ => true) {
@@ -68,22 +68,7 @@ export class Sequence {
 
     distinct(keySelectorFunction = k => k) {
         this._terminated = true;
-        const uniqueElements = [];
-
-        generatorLoop:
-        for(const e of this._generator) {
-            const elementKeySelected = keySelectorFunction(e);
-
-            for(const uniq of uniqueElements) {
-                if(elementKeySelected === keySelectorFunction(uniq)) {
-                    continue generatorLoop;
-                }
-            }
-
-            uniqueElements.push(e);
-        }
-
-        return new Sequence(() => generate_of(uniqueElements));
+        return new Sequence(() => generate_distinct(keySelectorFunction, this._generator));
     }
 
     sort(comparerFunction) {
@@ -155,21 +140,13 @@ export class Sequence {
     min(keySelector = k => k) {
         const firstElement = this._generator.next();
 
-        if(firstElement.done) {
-            return null;
-        }
-
-        return this.reduce(firstElement.value, (accumulator, nextElement) => keySelector(accumulator) < keySelector(nextElement) ? accumulator : nextElement);
+        return this.reduce(firstElement.done ? null : firstElement.value, (accumulator, nextElement) => keySelector(accumulator) < keySelector(nextElement) ? accumulator : nextElement);
     }
 
     max(keySelector = k => k) {
         const firstElement = this._generator.next();
 
-        if(firstElement.done) {
-            return null;
-        }
-
-        return this.reduce(firstElement.value, (accumulator, nextElement) => keySelector(accumulator) > keySelector(nextElement) ? accumulator : nextElement);
+        return this.reduce(firstElement.done ? null: firstElement.value, (accumulator, nextElement) => keySelector(accumulator) > keySelector(nextElement) ? accumulator : nextElement);
     }
 
     toArray() {
@@ -198,7 +175,7 @@ export class Sequence {
     chunking(chunkSizes) {
         const firstElement = this._generator.next();
 
-        return firstElement.done ? [] : _collect([[ firstElement.value ]], this, (result, element) => {
+        return _collect(firstElement.done ? [] : [[ firstElement.value ]], this, (result, element) => {
             const lastArray = result[result.length - 1];
 
             if(lastArray.length === chunkSizes) {
@@ -241,7 +218,7 @@ export class Sequence {
     last() {
         const firstElement = this._generator.next();
 
-        return firstElement.done ? null : this.reduce(firstElement.value, (_, nextElement) => nextElement);
+        return this.reduce(firstElement.done ? null : firstElement.value, (_, nextElement) => nextElement);
     }
 
     allMatches(predicateFunction) {
@@ -325,8 +302,8 @@ function checkTerminated(sequenceInstance) {
 }
 
 
-function* generate_range(begin, end, increment) {
-    for(let i = begin; i < end; i += increment) {
+function* generate_range(begin, end, step) {
+    for(let i = begin; i < end; i += step) {
         yield i;
     }
 }
@@ -384,6 +361,24 @@ function* generate_flatMap(mapper, generatorInstance) {
         for(const n of nested) {
             yield n;
         }
+    }
+}
+
+function* generate_distinct(keySelectorFunction, generatorInstance) {
+    const uniqueElements = [];
+
+    generatorLoop:
+    for(const element of generatorInstance) {
+        const elementKeySelected = keySelectorFunction(element);
+
+        for(const uniq of uniqueElements) {
+            if(elementKeySelected === keySelectorFunction(uniq)) {
+                continue generatorLoop;
+            }
+        }
+
+        uniqueElements.push(element);
+        yield element;
     }
 }
 
