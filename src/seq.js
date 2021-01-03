@@ -33,48 +33,47 @@ export class Sequence {
 
 
     filter(predicateFunction) {
-        this._terminated = true;
+        checkTerminated(this);
         return new Sequence(() => generate_filter(predicateFunction, this._generator));
     }
 
     map(mapperFunction) {
-        this._terminated = true;
+        checkTerminated(this);
         return new Sequence(() => generate_map(mapperFunction, this._generator));
     }
 
     flatMap(nestMapperFunction) {
-        this._terminated = true;
+        checkTerminated(this);
         return new Sequence(() => generate_flatMap(nestMapperFunction, this._generator));
     }
 
     take(count) {
-        this._terminated = true;
+        checkTerminated(this);
         return new Sequence(() => generate_take(count, this._generator));
     }
 
     skip(count) {
-        this._terminated = true;
+        checkTerminated(this);
         return new Sequence(() => generate_skip(count, this._generator));
     }
 
     takeWhile(predicateFunction) {
-        this._terminated = true;
+        checkTerminated(this);
         return new Sequence(() => generate_takeWhile(predicateFunction, this._generator));
     }
 
     skipWhile(predicateFunction) {
-        this._terminated = true;
+        checkTerminated(this);
         return new Sequence(() => generate_skipWhile(predicateFunction, this._generator));
     }
 
     distinct(keySelectorFunction = k => k) {
-        this._terminated = true;
+        checkTerminated(this);
         return new Sequence(() => generate_distinct(keySelectorFunction, this._generator));
     }
 
     sort(comparerFunction) {
         const allElements = this.toArray();
-        this._terminated = true;
 
         allElements.sort(comparerFunction);
 
@@ -97,6 +96,11 @@ export class Sequence {
 
             return firstKey < secondKey ? 1 : firstKey > secondKey ? -1 : 0;
         });
+    }
+
+    chunk(chunkSizes) {
+        checkTerminated(this);
+        return new Sequence(() => generate_chunk(chunkSizes, this._generator));
     }
 
 
@@ -171,20 +175,6 @@ export class Sequence {
 
     partitionBy(predicateFunction) {
         return _collect([[], []], this, (result, element) => result[predicateFunction(element) === true ? 0 : 1].push(element));
-    }
-
-    chunking(chunkSizes) {
-        const firstElement = this._generator.next();
-
-        return _collect(firstElement.done ? [] : [[ firstElement.value ]], this, (result, element) => {
-            const lastArray = result[result.length - 1];
-
-            if(lastArray.length === chunkSizes) {
-                result.push([ element ]);
-            }else{
-                lastArray.push(element);
-            }
-        });
     }
 
     groupingBy(keySelectorFunction, grouperFunction = Grouper.toArray()) {
@@ -326,28 +316,16 @@ function* generate_generate(supplierFunction) {
 }
 
 function* generate_filter(predicate, generatorInstance) {
-    while(true) {
-        const nextElement = generatorInstance.next();
-
-        if(nextElement.done) {
-            break;
-        }
-
-        if(predicate(nextElement.value) === true) {
-            yield nextElement.value;
+    for(const element of generatorInstance) {
+        if(predicate(element) === true) {
+            yield element;
         }
     }
 }
 
 function* generate_map(mapper, generatorInstance) {
-    while(true) {
-        const nextElement = generatorInstance.next();
-
-        if(nextElement.done) {
-            break;
-        }
-
-        yield mapper(nextElement.value);
+    for(const element of generatorInstance) {
+        yield mapper(element);
     }
 }
 
@@ -438,5 +416,27 @@ function* generate_skipWhile(predicate, generatorInstance) {
 
     for(const remaining of generatorInstance) {
         yield remaining;
+    }
+}
+
+function* generate_chunk(chunkSizes, generatorInstance) {
+    while(true) {
+        const elements = [];
+
+        for(let i = 0; i < chunkSizes; ++i) {
+            const element = generatorInstance.next();
+
+            if(element.done) {
+                break;
+            }
+
+            elements.push(element.value);
+        }
+
+        if(elements.length === 0) {
+            break;
+        }
+        
+        yield elements;
     }
 }

@@ -59,7 +59,7 @@ Sequence.of([ 1, 2, 3 ])                       // Create sequence from array
         <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#sort">sort</a></td>
         <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#sortascending">sortAscending</a></td>
         <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#sortdescending">sortDescending</a></td>
-        <td></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#chunk">chunk</a></td>
     </tr>
 </table>
 <br>
@@ -103,15 +103,18 @@ Sequence.of({ data: [ 1, 2, 3, 4 ] }, { data: [ 5, 6, 7, 8 ] })
         <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#max">max</a></td>
     </tr>
     <tr>
-        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#chunking">chunking</a></td>
         <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#groupingby">groupingBy</a></td>
         <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#first">first</a></td>
         <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#last">last</a></td>
         <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#join">join</a></td>
+        <td></td>
     </tr>
     <tr>
         <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#allmatches">allMatches</a></td>
         <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#anymatches">anyMatches</a></td>
+        <td></td>
+        <td></td>
+        <td></td>
     </tr>
 </table>
 <br>
