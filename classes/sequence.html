@@ -110,7 +110,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="sequence.html#allmatches" class="tsd-kind-icon">all<wbr>Matches</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="sequence.html#anymatches" class="tsd-kind-icon">any<wbr>Matches</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="sequence.html#average" class="tsd-kind-icon">average</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="sequence.html#chunking" class="tsd-kind-icon">chunking</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="sequence.html#chunk" class="tsd-kind-icon">chunk</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="sequence.html#count" class="tsd-kind-icon">count</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="sequence.html#distinct" class="tsd-kind-icon">distinct</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="sequence.html#filter" class="tsd-kind-icon">filter</a></li>
@@ -158,7 +158,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L6">seq.d.ts:6</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L6">seq.d.ts:6</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -184,7 +184,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L253">seq.d.ts:253</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L253">seq.d.ts:253</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -234,7 +234,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L260">seq.d.ts:260</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L260">seq.d.ts:260</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -284,7 +284,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L170">seq.d.ts:170</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L177">seq.d.ts:177</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -299,21 +299,21 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="chunking" class="tsd-anchor"></a>
-					<h3>chunking</h3>
+					<a name="chunk" class="tsd-anchor"></a>
+					<h3>chunk</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">chunking<span class="tsd-signature-symbol">(</span>chunkSizes<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></li>
+						<li class="tsd-signature tsd-kind-icon">chunk<span class="tsd-signature-symbol">(</span>chunkSizes<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="sequence.html" class="tsd-signature-type" data-tsd-kind="Class">Sequence</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L224">seq.d.ts:224</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L142">seq.d.ts:142</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Method for terminating the sequence and chunking the elements of the sequence into arrays</p>
+									<p>Method for creating a new sequence where the elements are chunked into arrays with each array containing max of &#39;chunkSizes&#39; elements</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -325,8 +325,8 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></h4>
-							<p>1 array containing arrays of the sequence&#39;s elements, with their maximum lengths restricted to the given chunk size</p>
+							<h4 class="tsd-returns-title">Returns <a href="sequence.html" class="tsd-signature-type" data-tsd-kind="Class">Sequence</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>New sequence with arrays containing the sequence&#39;s elements, with their maximum lengths restricted to the given chunk size</p>
 						</li>
 					</ul>
 				</section>
@@ -340,7 +340,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L163">seq.d.ts:163</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L170">seq.d.ts:170</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -363,7 +363,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L114">seq.d.ts:114</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L114">seq.d.ts:114</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -410,7 +410,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L65">seq.d.ts:65</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L65">seq.d.ts:65</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -460,7 +460,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L239">seq.d.ts:239</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L239">seq.d.ts:239</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -484,7 +484,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L79">seq.d.ts:79</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L79">seq.d.ts:79</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -540,7 +540,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L143">seq.d.ts:143</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L150">seq.d.ts:150</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -590,7 +590,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L232">seq.d.ts:232</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L232">seq.d.ts:232</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -655,7 +655,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L177">seq.d.ts:177</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L184">seq.d.ts:184</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -687,7 +687,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L246">seq.d.ts:246</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L246">seq.d.ts:246</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -711,7 +711,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L72">seq.d.ts:72</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L72">seq.d.ts:72</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -767,7 +767,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L193">seq.d.ts:193</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L200">seq.d.ts:200</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -818,7 +818,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L185">seq.d.ts:185</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L192">seq.d.ts:192</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -869,7 +869,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L217">seq.d.ts:217</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L224">seq.d.ts:224</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -919,7 +919,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L151">seq.d.ts:151</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L158">seq.d.ts:158</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -984,7 +984,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L93">seq.d.ts:93</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L93">seq.d.ts:93</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1016,7 +1016,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L107">seq.d.ts:107</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L107">seq.d.ts:107</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1066,7 +1066,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L121">seq.d.ts:121</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L121">seq.d.ts:121</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1119,7 +1119,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L128">seq.d.ts:128</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L128">seq.d.ts:128</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1169,7 +1169,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L135">seq.d.ts:135</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L135">seq.d.ts:135</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1219,7 +1219,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L157">seq.d.ts:157</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L164">seq.d.ts:164</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1242,7 +1242,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L86">seq.d.ts:86</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L86">seq.d.ts:86</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1274,7 +1274,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L100">seq.d.ts:100</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L100">seq.d.ts:100</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1324,7 +1324,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L199">seq.d.ts:199</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L206">seq.d.ts:206</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1347,7 +1347,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L209">seq.d.ts:209</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L216">seq.d.ts:216</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1461,7 +1461,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L50">seq.d.ts:50</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L50">seq.d.ts:50</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1490,7 +1490,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L44">seq.d.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L44">seq.d.ts:44</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1541,7 +1541,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L36">seq.d.ts:36</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L36">seq.d.ts:36</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1629,7 +1629,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L57">seq.d.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L57">seq.d.ts:57</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1667,7 +1667,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L16">seq.d.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L16">seq.d.ts:16</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1711,7 +1711,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/31b2288/src/seq.d.ts#L25">seq.d.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/Degubi/Js-Seq/blob/418a231/src/seq.d.ts#L25">seq.d.ts:25</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1778,7 +1778,7 @@
 								<a href="sequence.html#average" class="tsd-kind-icon">average</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="sequence.html#chunking" class="tsd-kind-icon">chunking</a>
+								<a href="sequence.html#chunk" class="tsd-kind-icon">chunk</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="sequence.html#count" class="tsd-kind-icon">count</a>
