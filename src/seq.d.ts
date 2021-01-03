@@ -134,6 +134,13 @@ export declare class Sequence<T> {
      */
     sortDescending(keySelectorFunction: (element: T) => any): Sequence<T>;
 
+    /**
+     * Method for creating a new sequence where the elements are chunked into arrays with each array containing max of 'chunkSizes' elements
+     * @param chunkSizes Max size of each chunk
+     * @returns New sequence with arrays containing the sequence's elements, with their maximum lengths restricted to the given chunk size
+     */
+    chunk(chunkSizes: number): Sequence<T[]>
+
     
     /**
      * Method for terminating the sequence and applying a function to each of the elements.
@@ -215,13 +222,6 @@ export declare class Sequence<T> {
      * @returns 2 arrays where the first one contains the elements that matched the predicate and the second one that didn't
      */
     partitionBy(predicateFunction: (element: T) => boolean): T[][];
-
-    /**
-     * Method for terminating the sequence and chunking the elements of the sequence into arrays
-     * @param chunkSizes Max size of each chunk
-     * @returns 1 array containing arrays of the sequence's elements, with their maximum lengths restricted to the given chunk size
-     */
-    chunking(chunkSizes: number): T[][]
 
     /**
      * Method for terminating the sequence and performing a grouping by operation on the elements of the sequence
