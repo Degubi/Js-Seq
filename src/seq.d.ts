@@ -13,7 +13,7 @@ export declare class Sequence<T> {
      * @param step Default is 1
      * @returns Sequence from begin-to stepping with increment
      */
-    static range(begin: number, end: number, step: number): Sequence<number>;
+    static range(begin: number, end: number, step?: number): Sequence<number>;
 
     /**
      * Function for creating a sequence of numbers using an inclusive number range generator.
@@ -22,7 +22,7 @@ export declare class Sequence<T> {
      * @param step Default is 1
      * @returns Sequence from begin-to stepping with step
      */
-    static rangeClosed(begin: number, end: number, step: number): Sequence<number>;
+    static rangeClosed(begin: number, end: number, step?: number): Sequence<number>;
 
     /**
      * Function for creating a sequence of elements using the seed as a base value and then applying the generator function to it,
@@ -33,7 +33,7 @@ export declare class Sequence<T> {
      * @param limiterPredicateFunction Optional parameter, defaults to always returning to true (meaning that it's infinite)
      * @returns Sequence with elements being populated lazily
      */
-    static iterate<T>(seed: T, generatorFunction: (element: T) => T, limiterPredicateFunction: (element: T) => boolean): Sequence<T>;
+    static iterate<T>(seed: T, generatorFunction: (element: T) => T, limiterPredicateFunction?: (element: T) => boolean): Sequence<T>;
 
     /**
      * Function for creating a sequence of elements using the input generator.  
@@ -48,6 +48,13 @@ export declare class Sequence<T> {
      * @returns Sequence with 0 elements
      */
     static empty<T>(): Sequence<T>;
+
+    /**
+     * Function for creating a sequence of elements using the passed in array source.  
+     * @param elements Input elements
+     * @returns Sequence populated from the input array
+     */
+    static of<T>(elements: T[]): Sequence<T>;
 
     /**
      * Function for creating a sequence of elements using the passed in elements as the source.  
@@ -111,7 +118,7 @@ export declare class Sequence<T> {
      * @param The Function for selecting a key for uniqueness, defaults to identity
      * @returns New sequence containing distinct elements according to the input function
      */
-    distinct(keySelectorFunction: (element: T) => any): Sequence<T>;
+    distinct(keySelectorFunction?: (element: T) => any): Sequence<T>;
 
     /**
      * Method for creating a new sequence where the elements are sorted based on the given comparer
@@ -125,14 +132,14 @@ export declare class Sequence<T> {
      * @param keySelectorFunction Function for selecting a key property to be used for sorting, defaults to identity
      * @returns New sequence with elements sorted in ascending order based on the given keySelector
      */
-    sortAscending(keySelectorFunction: (element: T) => any): Sequence<T>;
+    sortAscending(keySelectorFunction?: (element: T) => any): Sequence<T>;
 
     /**
      * Method for creating a new sequence where the elements are sorted in descending order based on the given keySelector
      * @param keySelectorFunction Function for selecting a key property to be used for sorting, defaults to identity
      * @returns New sequence with elements sorted in descending order based on the given keySelector
      */
-    sortDescending(keySelectorFunction: (element: T) => any): Sequence<T>;
+    sortDescending(keySelectorFunction?: (element: T) => any): Sequence<T>;
 
     /**
      * Method for creating a new sequence where the elements are chunked into arrays with each array containing max of 'chunkSizes' elements
@@ -161,7 +168,7 @@ export declare class Sequence<T> {
      * Method for terminating the sequence while calculating the sum of the elements.
      * @returns Sum of the elements in the sequence
      */
-    sum(): number;
+    sum(this: Sequence<number>): number;
 
     /**
      * Method for terminating the sequence while counting the number of elements.
@@ -174,14 +181,14 @@ export declare class Sequence<T> {
      * Note: This function returns null if the sequence is empty
      * @returns Average of the elements in the sequence or null if the sequence was empty
      */
-    average(): number | null;
+    average(this: Sequence<number>): number | null;
 
     /**
      * Method for terminating the sequence while joining the elements together using the given separator.
      * @param separator The separator used for joining the elements, defaults to empty string
      * @returns The final joined string
      */
-    join(separator: string): string;
+    join(this: Sequence<string>, separator?: string): string;
 
     /**
      * Method for retrieving the smallest element from the sequence.  
@@ -189,7 +196,7 @@ export declare class Sequence<T> {
      * @param keySelectorFunction Function used for extracting the key from the object to compare against, defaults to identity
      * @returns The smallest element in the sequence according to the keySelector or null if the sequence was empty
      */
-    min(keySelectorFunction: (element: T) => number): T | null;
+    min(keySelectorFunction?: (element: T) => number): T | null;
 
     /**
      * Method for retrieving the largest element from the sequence.  
@@ -197,7 +204,7 @@ export declare class Sequence<T> {
      * @param keySelectorFunction Function used for extracting the key from the object to compare against, defaults to identity
      * @returns The largest element in the sequence according to the keySelector or null if the sequence was empty
      */
-    max(keySelectorFunction: (element: T) => number): T | null;
+    max(keySelectorFunction?: (element: T) => number): T | null;
 
     /**
      * Method for terminating the sequence and collecting the elements of the sequence into an array.
@@ -209,19 +216,27 @@ export declare class Sequence<T> {
      * Method for terminating the sequence and collecting the elements into an object using the key & value selector functions  
      * @param keySelectorFunction Function used for extracting the key from the object
      * @param valueSelectorFunction Function used for extracting the value from the object
-     * @param duplicateResolverFunction Takes 3 arguments: the key, the old value and the value we're trying to insert at the moment.
+     * @param duplicateResolverFunction Takes 3 arguments: the key, the old value and the value we're trying to insert at the moment. Defaults to throwing an error
      * Return value is the value that gets inserted as the value of the duplicate key. Default is to throw an error
      * @returns An object where the keys are populated using the keySelector and the corresponding values are the values returned by the valueSelector
      */
     toMap<K, V>(keySelectorFunction: (element: T) => K, valueSelectorFunction: (element: T) => V,
-                duplicateResolverFunction: (key: K, previousValue: V, currentValue: V) => V): Map<K, V>;
+                duplicateResolverFunction?: (key: K, previousValue: V, currentValue: V) => V): Map<K, V>;
 
     /**
      * Method for terminating the sequence and partitioning the elements into 2 arrays according to the given predicate
      * @param predicateFunction The predicate to test against
      * @returns 2 arrays where the first one contains the elements that matched the predicate and the second one that didn't
      */
-    partitionBy(predicateFunction: (element: T) => boolean): T[][];
+    partitionBy(predicateFunction: (element: T) => boolean): [T[], T[]];
+
+    /**
+     * Method for terminating the sequence and performing a grouping by operation on the elements of the sequence.  
+     * Note: This is the same as calling groupingBy with Grouper.toArray()
+     * @param keySelectorFunction Function used for extracting the keys of the result
+     * @returns The result of the grouping
+     */
+    groupingBy<K>(keySelectorFunction: (element: T) => K): Map<K, T[]>;
 
     /**
      * Method for terminating the sequence and performing a grouping by operation on the elements of the sequence
@@ -260,13 +275,13 @@ export declare class Sequence<T> {
     anyMatches(predicateFunction: (element: T) => boolean): boolean;
 }
 
-export declare class Grouper<V> {
+export declare class Grouper<T> {
 
     /**
      * Creates a grouper function that maps each key to an array of elements for that specific key.
      * @returns A new grouper instance
      */
-    static toArray<V>(): Grouper<V[]>;
+    static toArray<T>(): Grouper<T[]>;
 
     /**
      * Creates a grouper function that maps each key to 1 and then sums it (a.k.a counts the occurence of it).  
@@ -280,12 +295,12 @@ export declare class Grouper<V> {
      * @param keySelectorFunction Function used for extracting the property to calculate the sum of
      * @returns A new grouper instance
      */
-    static summing<K>(keySelectorFunction: (element: K) => number): Grouper<number>;
+    static summing<T>(keySelectorFunction: (element: T) => number): Grouper<number>;
 
     /**
      * Creates a grouper function that maps each key to the average of the keySelector's key.
      * @param keySelectorFunction Function used for extracting the property to calculate the average of
      * @returns A new grouper instance
      */
-    static averaging<K>(keySelectorFunction: (element: K) => number): Grouper<number>;
+    static averaging<T>(keySelectorFunction: (element: T) => number): Grouper<number>;
 }

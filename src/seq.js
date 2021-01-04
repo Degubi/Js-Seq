@@ -161,7 +161,7 @@ export class Sequence {
     toMap(keySelectorFunction, valueSelectorFunction,
           duplicateResolverFunction = (key, oldE, newE) => { throw `Duplicate value found for key: '${key}', previous value: '${oldE}', current value: '${newE}'`;}) {
 
-        return _collect({}, this, (result, element) => {
+        return _collect(new Map(), this, (result, element) => {
             const key = keySelectorFunction(element);
             const value = valueSelectorFunction(element);
 
@@ -178,7 +178,7 @@ export class Sequence {
     }
 
     groupingBy(keySelectorFunction, grouperFunction = Grouper.toArray()) {
-        const result = _collect({}, this, (result, element) => {
+        const result = _collect(new Map(), this, (result, element) => {
             const mappedKey = keySelectorFunction(element);
 
             if(result[mappedKey] === undefined) {
