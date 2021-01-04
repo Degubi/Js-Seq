@@ -7,6 +7,7 @@ export function iterate() { return Sequence.iterate(0, k => k + 1, k => k < 5); 
 export function empty() { return Sequence.empty(); }
 export function terminated() { const seq = Sequence.range(0, 5); seq.forEach(_ => {}); return seq; }
 export function of() { return Sequence.of(0, 1, 2, 3); }
+export function ofObjects() { return Sequence.of({ prop1: 'asd', prop2: 50 }, { prop1: 'asd', prop2: 20 }, { prop1: 'kek', prop2: 10 }); }
 export function filter() { return Sequence.of(0, 1, 2, 3, 4, 5).filter(k => k % 2 === 0); }
 export function map() { return Sequence.of(0, 2, 4).map(k => k * 2); }
 export function flatMap() { return Sequence.of([{ data: [ 1, 2, 3 ] }, { data: [ 4, 5, 6 ] }]).flatMap(k => k.data); }

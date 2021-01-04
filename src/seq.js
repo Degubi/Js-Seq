@@ -164,12 +164,9 @@ export class Sequence {
         return _collect(new Map(), this, (result, element) => {
             const key = keySelectorFunction(element);
             const value = valueSelectorFunction(element);
+            const existingValue = result.get(key);
 
-            if(result[key] === undefined) {
-                result[key] = value;
-            }else{
-                result[key] = duplicateResolverFunction(key, result[key], value);
-            }
+            result.set(key, existingValue === undefined ? value : duplicateResolverFunction(key, existingValue, value));
         });
     }
 
@@ -181,8 +178,8 @@ export class Sequence {
         const result = _collect(new Map(), this, (result, element) => {
             const mappedKey = keySelectorFunction(element);
 
-            if(result[mappedKey] === undefined) {
-                result[mappedKey] = grouperFunction._accumulatorSupplier();
+            if(!result.has(mappedKey)) {
+                result.set(mappedKey, grouperFunction._accumulatorSupplier());
             }
 
             grouperFunction._accumulatorFunction(result, mappedKey, element);
@@ -190,7 +187,7 @@ export class Sequence {
 
         const finisherFunction = grouperFunction._finisherFunction;
         if(finisherFunction) {
-            for(const [key, value] of Object.entries(result)) {
+            for(const [key, value] of result.entries()) {
                 finisherFunction(result, key, value);
             }
         }
@@ -242,29 +239,29 @@ export class Grouper {
     static toArray() {
         return {
             _accumulatorSupplier: () => [],
-            _accumulatorFunction: (accumulator, key, element) => accumulator[key].push(element)
+            _accumulatorFunction: (accumulator, key, element) => accumulator.get(key).push(element)
         }
     }
 
     static counting() {
         return {
             _accumulatorSupplier: () => 0,
-            _accumulatorFunction: (accumulator, key, _) => ++accumulator[key]
+            _accumulatorFunction: (accumulator, key, _) => accumulator.set(key, accumulator.get(key) + 1)
         }
     }
 
     static summing(keySelector) {
         return {
             _accumulatorSupplier: () => 0,
-            _accumulatorFunction: (accumulator, key, element) => accumulator[key] += keySelector(element)
+            _accumulatorFunction: (accumulator, key, element) => accumulator.set(key, accumulator.get(key) + keySelector(element))
         }
     }
 
     static averaging(keySelector) {
         return {
             _accumulatorSupplier: () => ({ sum: 0, count: 0 }),
-            _accumulatorFunction: (accumulator, key, element) => { accumulator[key].sum += keySelector(element); ++accumulator[key].count; },
-            _finisherFunction: (result, key, value) => result[key] = value.sum / value.count
+            _accumulatorFunction: (accumulator, key, element) => { const acc = accumulator.get(key); acc.sum += keySelector(element); ++acc.count; },
+            _finisherFunction: (result, key, value) => result.set(key, value.sum / value.count)
         }
     }
 }
