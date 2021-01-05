@@ -103,11 +103,11 @@ Sequence.of({ data: [ 1, 2, 3, 4 ] }, { data: [ 5, 6, 7, 8 ] })
         <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#max">max</a></td>
     </tr>
     <tr>
-        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#groupingby">groupingBy</a></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#groupby">groupBy</a></td>
         <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#first">first</a></td>
         <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#last">last</a></td>
         <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#join">join</a></td>
-        <td></td>
+        <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#statistics">statistics</a></td>
     </tr>
     <tr>
         <td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#allmatches">allMatches</a></td>
@@ -135,6 +135,7 @@ seq.toArray();                      // Collect all elements into an array
 seq.first();                        // Find the first element in the sequence, this returns the element or null
 seq.last();                         // Find the last element in the sequence, this returns the element or null
 seq.join(',');                      // Join elements with a comma
+seq.statistics();                   // Returns an object with sum, count, min, max, average properties
 
 const seq = Sequence.of({ prop1: 5, prop2: 'hey' }, { prop1: 20, prop2: 'hi' }, { prop1: 20, prop2: 'hey' });
 
@@ -152,16 +153,16 @@ seq.allMatches(k => k.prop1 > 0);
 seq.anyMatches(k => k.prop2 === 'nope');
 
 // Groups elements by 'prop1' where the values are the objects that had the same key
-seq.groupingBy(k => k.prop1);
+seq.groupBy(k => k.prop1);
 
 // This does the same as the last example
-seq.groupingBy(k => k.prop1, Grouper.toArray());
+seq.groupBy(k => k.prop1, Grouper.toArray());
 
 // Groups elements prop1' where the value is the frequency of the key
-seq.groupingBy(k => k.prop1, Grouper.counting());
+seq.groupBy(k => k.prop1, Grouper.counting());
 
 // Groups elements by 'prop2' where the value is the sum of 'prop1'
-seq.groupingBy(k => k.prop2, Grouper.summing(k => k.prop1));
+seq.groupBy(k => k.prop2, Grouper.summing(k => k.prop1));
 
 // First array contains the elements where the predicate was true
 const [matching, notMatching] = seq.partitionBy(k => k.prop1 % 2 === 0);

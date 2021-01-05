@@ -1,5 +1,5 @@
 /**
- * Sequence class used for creating, manipulating & finishing sequences.
+ * Sequence class, used for creating, manipulating & finishing sequences.
  * Sequences are created using static factories or from arrays using .sequence().
  * @author Degubi
  */
@@ -171,6 +171,12 @@ export declare class Sequence<T> {
     sum(this: Sequence<number>): number;
 
     /**
+     * Method for terminating the sequence and calculating the statistics of the elements of the sequence.
+     * @returns Object that contains the sum, count, min, max and average of the sequence
+     */
+    statistics(this: Sequence<number>): NumberStatistics;
+
+    /**
      * Method for terminating the sequence while counting the number of elements.
      * @returns Count of the elements in the sequence
      */
@@ -232,11 +238,11 @@ export declare class Sequence<T> {
 
     /**
      * Method for terminating the sequence and performing a grouping by operation on the elements of the sequence.  
-     * Note: This is the same as calling groupingBy with Grouper.toArray()
+     * Note: This is the same as calling groupBy with Grouper.toArray()
      * @param keySelectorFunction Function used for extracting the keys of the result
      * @returns The result of the grouping
      */
-    groupingBy<K>(keySelectorFunction: (element: T) => K): Map<K, T[]>;
+    groupBy<K>(keySelectorFunction: (element: T) => K): Map<K, T[]>;
 
     /**
      * Method for terminating the sequence and performing a grouping by operation on the elements of the sequence
@@ -244,7 +250,7 @@ export declare class Sequence<T> {
      * @param grouperFunction An instance of a Grouper object, defaults to Grouper.toArray()
      * @returns The result of the grouping
      */
-    groupingBy<K, V>(keySelectorFunction: (element: T) => K, grouperFunction: Grouper<V>): Map<K, V>;
+    groupBy<K, V>(keySelectorFunction: (element: T) => K, grouperFunction: Grouper<V>): Map<K, V>;
 
     /**
      * Method for terminating the sequence and getting the first element from it.  
@@ -275,6 +281,10 @@ export declare class Sequence<T> {
     anyMatches(predicateFunction: (element: T) => boolean): boolean;
 }
 
+/**
+ * Grouper utility class, contains static factories for creating Grouper functions used with groupBy.
+ * @author Degubi
+ */
 export declare class Grouper<T> {
 
     /**
@@ -303,4 +313,13 @@ export declare class Grouper<T> {
      * @returns A new grouper instance
      */
     static averaging<T>(keySelectorFunction: (element: T) => number): Grouper<number>;
+
+    /**
+     * Creates a grouper function that maps each key to the statistics of the keySelector's key.
+     * @param keySelectorFunction Function used for extracting the property to calculate the statistics of
+     * @returns A new grouper instance
+     */
+    static statisticizing<T>(keySelectorFunction: (element: T) => number): Grouper<NumberStatistics>;
 }
+
+type NumberStatistics = { sum: number, count: number, min: number, max: number, average: number }

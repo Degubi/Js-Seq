@@ -138,6 +138,18 @@ export class Sequence {
         return count === 0 ? null : sum / count;
     }
 
+    statistics() {
+        const { sum, count, min, max } = _collect({ sum: 0, count: 0, min: Number.MAX_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER }, this,
+                                                  (accumulator, nextElement) => {
+                                                      ++accumulator.count;
+                                                      accumulator.sum += nextElement;
+                                                      accumulator.min = Math.min(accumulator.min, nextElement);
+                                                      accumulator.max = Math.max(accumulator.max, nextElement);
+                                                    });
+
+        return count === 0 ? null : { sum, count, min, max, average: sum / count };
+    }
+
     join(separator = '') {
         return this.toArray().join(separator);
     }
@@ -174,7 +186,7 @@ export class Sequence {
         return _collect([[], []], this, (result, element) => result[predicateFunction(element) === true ? 0 : 1].push(element));
     }
 
-    groupingBy(keySelectorFunction, grouperFunction = Grouper.toArray()) {
+    groupBy(keySelectorFunction, grouperFunction = Grouper.toArray()) {
         const result = _collect(new Map(), this, (result, element) => {
             const mappedKey = keySelectorFunction(element);
 
@@ -262,6 +274,22 @@ export class Grouper {
             _accumulatorSupplier: () => ({ sum: 0, count: 0 }),
             _accumulatorFunction: (accumulator, key, element) => { const acc = accumulator.get(key); acc.sum += keySelector(element); ++acc.count; },
             _finisherFunction: (result, key, value) => result.set(key, value.sum / value.count)
+        }
+    }
+
+    static statisticizing(keySelector) {
+        return {
+            _accumulatorSupplier: () => ({ sum: 0, count: 0, min: Number.MAX_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER }),
+            _accumulatorFunction: (accumulator, key, element) => {
+                const acc = accumulator.get(key);
+                const keySelected = keySelector(element);
+
+                ++acc.count;
+                acc.sum += keySelected;
+                acc.min = Math.min(acc.min, keySelected);
+                acc.max = Math.max(acc.max, keySelected);
+            },
+            _finisherFunction: (result, key, value) => result.set(key, { sum: value.sum, count: value.count, min: value.min, max: value.max, average: value.sum / value.count })
         }
     }
 }
