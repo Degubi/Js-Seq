@@ -61,9 +61,10 @@
 				<a href="#javascript-functional-sequence-processing-library" id="javascript-functional-sequence-processing-library" style="color: inherit; text-decoration: none;">
 					<h1>Javascript functional sequence processing library</h1>
 				</a>
-				<p><img src="https://img.shields.io/github/workflow/status/degubi/js-seq/Run%20tests?label=Build" alt="GitHub Workflow Status">
-					<img src="https://img.shields.io/badge/dependencies-none-green.svg?label=Dependencies" alt="Dependencies">
-				<img src="https://img.shields.io/github/package-json/v/degubi/Js-Seq?color=orange&label=Npm%20Version" alt="GitHub package.json version"></p>
+				<p><a href="https://github.com/Degubi/Js-Seq/issues"><img src="https://img.shields.io/github/issues/Degubi/Js-Seq?label=Issues&style=plastic&logo=github" alt="Github issues"></a>
+					<a href="https://github.com/Degubi/Js-Seq/packages/558414"><img src="https://img.shields.io/github/package-json/v/degubi/Js-Seq?color=orange&label=Npm%20Version&style=plastic&logo=npm" alt="GitHub package.json version"></a>
+					<a href="https://github.com/Degubi/Js-Seq/actions"><img src="https://img.shields.io/github/workflow/status/degubi/js-seq/Run%20tests?label=Build&style=plastic&logo=github-actions" alt="GitHub Workflow Status"></a>
+				<a href="https://github.com/Degubi/Js-Seq/blob/master/package.json"><img src="https://img.shields.io/badge/dependencies-none-green.svg?label=Dependencies&style=plastic" alt="Dependencies"></a></p>
 				<ul>
 					<li>The api is very similar to java8 streams</li>
 					<li>Lazy by default</li>
@@ -75,7 +76,7 @@
 				<a href="#using-npm-via-github-packages" id="using-npm-via-github-packages" style="color: inherit; text-decoration: none;">
 					<h2>Using npm: (via Github packages)</h2>
 				</a>
-				<p><code>npm install @degubi/js-seq@1.0.2</code>
+				<p><code>npm install @degubi/js-seq</code>
 				<br></p>
 				<a href="#without-npm" id="without-npm" style="color: inherit; text-decoration: none;">
 					<h2>Without npm:</h2>
@@ -172,11 +173,11 @@
 						<td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#max">max</a></td>
 					</tr>
 					<tr>
-						<td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#groupingby">groupingBy</a></td>
+						<td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#groupby">groupBy</a></td>
 						<td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#first">first</a></td>
 						<td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#last">last</a></td>
 						<td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#join">join</a></td>
-						<td></td>
+						<td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#statistics">statistics</a></td>
 					</tr>
 					<tr>
 						<td><a href = "https://degubi.github.io/Js-Seq/classes/sequence.html#allmatches">allMatches</a></td>
@@ -203,6 +204,7 @@
 <span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">first</span><span style="color: #000000">();                        </span><span style="color: #008000">// Find the first element in the sequence, this returns the element or null</span>
 <span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">last</span><span style="color: #000000">();                         </span><span style="color: #008000">// Find the last element in the sequence, this returns the element or null</span>
 <span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">join</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;,&#039;</span><span style="color: #000000">);                      </span><span style="color: #008000">// Join elements with a comma</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">statistics</span><span style="color: #000000">();                   </span><span style="color: #008000">// Returns an object with sum, count, min, max, average properties</span>
 
 <span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">seq</span><span style="color: #000000"> = </span><span style="color: #001080">Sequence</span><span style="color: #000000">.</span><span style="color: #795E26">of</span><span style="color: #000000">({ </span><span style="color: #001080">prop1:</span><span style="color: #000000"> </span><span style="color: #098658">5</span><span style="color: #000000">, </span><span style="color: #001080">prop2:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;hey&#039;</span><span style="color: #000000"> }, { </span><span style="color: #001080">prop1:</span><span style="color: #000000"> </span><span style="color: #098658">20</span><span style="color: #000000">, </span><span style="color: #001080">prop2:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;hi&#039;</span><span style="color: #000000"> }, { </span><span style="color: #001080">prop1:</span><span style="color: #000000"> </span><span style="color: #098658">20</span><span style="color: #000000">, </span><span style="color: #001080">prop2:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;hey&#039;</span><span style="color: #000000"> });</span>
 
@@ -220,16 +222,16 @@
 <span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">anyMatches</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop2</span><span style="color: #000000"> === </span><span style="color: #A31515">&#039;nope&#039;</span><span style="color: #000000">);</span>
 
 <span style="color: #008000">// Groups elements by &#039;prop1&#039; where the values are the objects that had the same key</span>
-<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">groupingBy</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop1</span><span style="color: #000000">);</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">groupBy</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop1</span><span style="color: #000000">);</span>
 
 <span style="color: #008000">// This does the same as the last example</span>
-<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">groupingBy</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop1</span><span style="color: #000000">, </span><span style="color: #001080">Grouper</span><span style="color: #000000">.</span><span style="color: #795E26">toArray</span><span style="color: #000000">());</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">groupBy</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop1</span><span style="color: #000000">, </span><span style="color: #001080">Grouper</span><span style="color: #000000">.</span><span style="color: #795E26">toArray</span><span style="color: #000000">());</span>
 
 <span style="color: #008000">// Groups elements prop1&#039; where the value is the frequency of the key</span>
-<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">groupingBy</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop1</span><span style="color: #000000">, </span><span style="color: #001080">Grouper</span><span style="color: #000000">.</span><span style="color: #795E26">counting</span><span style="color: #000000">());</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">groupBy</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop1</span><span style="color: #000000">, </span><span style="color: #001080">Grouper</span><span style="color: #000000">.</span><span style="color: #795E26">counting</span><span style="color: #000000">());</span>
 
 <span style="color: #008000">// Groups elements by &#039;prop2&#039; where the value is the sum of &#039;prop1&#039;</span>
-<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">groupingBy</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop2</span><span style="color: #000000">, </span><span style="color: #001080">Grouper</span><span style="color: #000000">.</span><span style="color: #795E26">summing</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop1</span><span style="color: #000000">));</span>
+<span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">groupBy</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop2</span><span style="color: #000000">, </span><span style="color: #001080">Grouper</span><span style="color: #000000">.</span><span style="color: #795E26">summing</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop1</span><span style="color: #000000">));</span>
 
 <span style="color: #008000">// First array contains the elements where the predicate was true</span>
 <span style="color: #0000FF">const</span><span style="color: #000000"> [</span><span style="color: #0070C1">matching</span><span style="color: #000000">, </span><span style="color: #0070C1">notMatching</span><span style="color: #000000">] = </span><span style="color: #001080">seq</span><span style="color: #000000">.</span><span style="color: #795E26">partitionBy</span><span style="color: #000000">(</span><span style="color: #001080">k</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">k</span><span style="color: #000000">.</span><span style="color: #001080">prop1</span><span style="color: #000000"> % </span><span style="color: #098658">2</span><span style="color: #000000"> === </span><span style="color: #098658">0</span><span style="color: #000000">);</span>
@@ -251,6 +253,9 @@
 					</li>
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/sequence.html" class="tsd-kind-icon">Sequence</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#numberstatistics" class="tsd-kind-icon">Number<wbr>Statistics</a>
 					</li>
 				</ul>
 			</nav>
