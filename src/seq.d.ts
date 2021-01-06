@@ -148,7 +148,7 @@ export declare class Sequence<T> {
      */
     chunk(chunkSizes: number): Sequence<T[]>
 
-    
+
     /**
      * Method for terminating the sequence and applying a function to each of the elements.
      * @param consumerFunction Function to apply to each of the elements
@@ -250,7 +250,7 @@ export declare class Sequence<T> {
      * @param grouperFunction An instance of a Grouper object, defaults to Grouper.toArray()
      * @returns The result of the grouping
      */
-    groupBy<K, V>(keySelectorFunction: (element: T) => K, grouperFunction: Grouper<V>): Map<K, V>;
+    groupBy<K, V>(keySelectorFunction: (element: T) => K, grouperFunction: Grouper<T, V>): Map<K, V>;
 
     /**
      * Method for terminating the sequence and getting the first element from it.  
@@ -285,41 +285,44 @@ export declare class Sequence<T> {
  * Grouper utility class, contains static factories for creating Grouper functions used with groupBy.
  * @author Degubi
  */
-export declare class Grouper<T> {
+export declare class Grouper<T, V> {
+
+    private _: undefined;  // This field is only here to make tsc complain when assigning e.g strings to a Grouper type variable... Idk why it allows it without this
+    private constructor();
 
     /**
      * Creates a grouper function that maps each key to an array of elements for that specific key.
      * @returns A new grouper instance
      */
-    static toArray<T>(): Grouper<T[]>;
+    static toArray<T>(): Grouper<T, T[]>;
 
     /**
      * Creates a grouper function that maps each key to 1 and then sums it (a.k.a counts the occurence of it).  
      * Useful for creating frequency maps.
      * @returns A new grouper instance
      */
-    static counting(): Grouper<number>;
+    static counting<T>(): Grouper<T, number>;
 
     /**
      * Creates a grouper function that maps each key to the sum of the keySelector's key.
      * @param keySelectorFunction Function used for extracting the property to calculate the sum of
      * @returns A new grouper instance
      */
-    static summing<T>(keySelectorFunction: (element: T) => number): Grouper<number>;
+    static summing<T>(keySelectorFunction: (element: T) => number): Grouper<T, number>;
 
     /**
      * Creates a grouper function that maps each key to the average of the keySelector's key.
      * @param keySelectorFunction Function used for extracting the property to calculate the average of
      * @returns A new grouper instance
      */
-    static averaging<T>(keySelectorFunction: (element: T) => number): Grouper<number>;
+    static averaging<T>(keySelectorFunction: (element: T) => number): Grouper<T, number>;
 
     /**
      * Creates a grouper function that maps each key to the statistics of the keySelector's key.
      * @param keySelectorFunction Function used for extracting the property to calculate the statistics of
      * @returns A new grouper instance
      */
-    static statisticizing<T>(keySelectorFunction: (element: T) => number): Grouper<NumberStatistics>;
+    static statisticizing<T>(keySelectorFunction: (element: T) => number): Grouper<T, NumberStatistics>;
 }
 
 type NumberStatistics = { sum: number, count: number, min: number, max: number, average: number }
