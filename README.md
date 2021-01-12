@@ -8,6 +8,9 @@
 - Lazy by default
 - Made because of boredom
 
+# Versions for other languages
+- Python: https://github.com/Degubi/Py-Seq
+
 # Installation
 ## Using npm: (via Github packages)
 
