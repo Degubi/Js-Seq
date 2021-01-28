@@ -1,6 +1,7 @@
 # Javascript functional sequence processing library
 [![Github issues](https://img.shields.io/github/issues/Degubi/Js-Seq?label=Issues&style=plastic&logo=github)](https://github.com/Degubi/Js-Seq/issues)
 [![GitHub package.json version](https://img.shields.io/github/package-json/v/degubi/Js-Seq?color=orange&label=Npm%20Version&style=plastic&logo=npm)](https://github.com/Degubi/Js-Seq/packages/558414)
+[![Linecount](https://img.shields.io/tokei/lines/github/degubi/Js-Seq?label=Total%20Lines&logo=Github&style=plastic)](https://github.com/Degubi/Js-Seq/tree/master/src)
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/degubi/js-seq/Run%20tests?label=Build&style=plastic&logo=github-actions)](https://github.com/Degubi/Js-Seq/actions)
 [![Dependencies](https://img.shields.io/badge/dependencies-none-green.svg?label=Dependencies&style=plastic)](https://github.com/Degubi/Js-Seq/blob/master/package.json)
 
