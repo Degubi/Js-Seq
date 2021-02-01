@@ -1,5 +1,5 @@
 export class Sequence {
-    
+
     constructor(generator) {
         this._generator = generator();
         this._terminated = false;
@@ -25,9 +25,9 @@ export class Sequence {
         return new Sequence(() => generate_empty());
     }
 
-    static of(...elements) {
-        return elements.length === 1 && Array.isArray(elements[0]) ? new Sequence(() => generate_of(elements[0]))
-                                                                   : new Sequence(() => generate_of(elements));
+    static from(...elements) {
+        return elements.length === 1 && Array.isArray(elements[0]) ? new Sequence(() => generate_from(elements[0]))
+                                                                   : new Sequence(() => generate_from(elements));
     }
 
 
@@ -77,7 +77,7 @@ export class Sequence {
 
         allElements.sort(comparerFunction);
 
-        return new Sequence(() => generate_of(allElements));
+        return new Sequence(() => generate_from(allElements));
     }
 
     sortAscending(keySelectorFunction = k => k) {
@@ -116,11 +116,11 @@ export class Sequence {
         checkTerminated(this);
 
         let returnVal = seed;
-    
+
         for(const e of this._generator) {
             returnVal = accumulatorFunction(returnVal, e);
         }
-    
+
         return returnVal;
     }
 
@@ -326,7 +326,7 @@ function* generate_iterate(seed, generatorFunction, limiter) {
     }
 }
 
-function* generate_of(iterableObject) {
+function* generate_from(iterableObject) {
     for(const e of iterableObject) {
         yield e;
     }
@@ -425,7 +425,7 @@ function* generate_takeWhile(predicate, generatorInstance) {
     }
 }
 
-function* generate_skipWhile(predicate, generatorInstance) {    
+function* generate_skipWhile(predicate, generatorInstance) {
     while(true) {
         const nextElement = generatorInstance.next();
 
@@ -461,7 +461,7 @@ function* generate_chunk(chunkSizes, generatorInstance) {
         if(elements.length === 0) {
             break;
         }
-        
+
         yield elements;
     }
 }

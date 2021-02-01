@@ -31,14 +31,14 @@ import { Sequence } from './seq.js';
 ```
 ## Creating sequences:
 ```javascript
-Sequence.range(0, 10);                         // 1 to 10 excluding 10
-Sequence.rangeClosed(0, 10)                    // 1 to 10 including 10
-Sequence.range(0, 10, 2);                      // 1 to 10 stepping 2, excluding 10
-Sequence.iterate(1, k => k * 2)                // 1, 2, 4, 8.... this sequence is infinite
-Sequence.iterate(1, k => k * 2, k => k < 50)   // Same as the last one but taking values less than 50 (same as doing a takeWhile)
-Sequence.generate(readline)                    // Generate strings with reading from console
-Sequence.of(1, 3, 3, 7, 4, 2, 0)               // Sequence of elements
-Sequence.of([ 1, 2, 3 ])                       // Create sequence from array
+Sequence.range(0, 10);                           // 1 to 10 excluding 10
+Sequence.rangeClosed(0, 10)                      // 1 to 10 including 10
+Sequence.range(0, 10, 2);                        // 1 to 10 stepping 2, excluding 10
+Sequence.iterate(1, k => k * 2)                  // 1, 2, 4, 8.... this sequence is infinite
+Sequence.iterate(1, k => k * 2, k => k < 50)     // Same as the last one but taking values less than 50 (same as doing a takeWhile)
+Sequence.generate(readline)                      // Generate strings with reading from console
+Sequence.from(1, 3, 3, 7, 4, 2, 0)               // Sequence of elements
+Sequence.from([ 1, 2, 3 ])                       // Create sequence from array
 ```
 
 ## Transforming sequences (intermediate operations):
@@ -78,11 +78,11 @@ Sequence.range(0, 100);             // Need to create a new sequence with every 
         .take(10)                   // Take the first 10 elements only
         .sortAscending()            // Sort them in ascending order
 
-Sequence.of({ prop1: 5, prop2: 'hey' }, { prop1: 5, prop2: 'ho'}, { prop1: 20, prop2: 'hi' })
+Sequence.from({ prop1: 5, prop2: 'hey' }, { prop1: 5, prop2: 'ho'}, { prop1: 20, prop2: 'hi' })
         .distinct(k => k.prop1)         // Many functions have key selecting overloads, default is always identity
         .sortDescending(k => k.prop1)   // Same happens here
 
-Sequence.of({ data: [ 1, 2, 3, 4 ] }, { data: [ 5, 6, 7, 8 ] })
+Sequence.from({ data: [ 1, 2, 3, 4 ] }, { data: [ 5, 6, 7, 8 ] })
         .flatMap(k => k.data)
         .takeWhile(k => k < 6)
 ```
@@ -141,7 +141,7 @@ seq.last();                         // Find the last element in the sequence, th
 seq.join(',');                      // Join elements with a comma
 seq.statistics();                   // Returns an object with sum, count, min, max, average properties
 
-const seq = Sequence.of({ prop1: 5, prop2: 'hey' }, { prop1: 20, prop2: 'hi' }, { prop1: 20, prop2: 'hey' });
+const seq = Sequence.from({ prop1: 5, prop2: 'hey' }, { prop1: 20, prop2: 'hi' }, { prop1: 20, prop2: 'hey' });
 
 // Creates an object where the keys are from 'prop1' and the corresponding values are from 'prop2'
 // Note: This call throws an error because of the duplicate 'prop1: 20' key
